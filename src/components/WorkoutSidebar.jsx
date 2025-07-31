@@ -3,28 +3,608 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import './WorkoutSidebar.css';
 
-const WorkoutSidebar = () => {
+// Preloaded workout database
+const workoutDatabase = [
+  // Push Day Exercises
+  {
+    name: "Bench Press",
+    category: "push",
+    muscleGroups: ["chest", "triceps", "shoulders"],
+    difficulty: "intermediate",
+    estimatedTime: "45 minutes",
+    benefits: ["Upper body strength", "Chest development", "Tricep activation"],
+    instructions: [
+      "Lie on bench with feet flat on ground",
+      "Grip bar slightly wider than shoulder width",
+      "Lower bar to chest with control",
+      "Press bar back up to starting position"
+    ],
+    tips: "Keep your core tight and maintain proper form throughout the movement",
+    youtubeUrl: "https://youtu.be/rT7DgCr-3pg",
+    calories: 180,
+    equipment: ["barbell", "bench"],
+    variations: ["Dumbbell Bench Press", "Incline Bench Press", "Decline Bench Press"]
+  },
+  {
+    name: "Overhead Press",
+    category: "push",
+    muscleGroups: ["shoulders", "triceps"],
+    difficulty: "intermediate",
+    estimatedTime: "30 minutes",
+    benefits: ["Shoulder strength", "Core stability", "Upper body power"],
+    instructions: [
+      "Stand with feet shoulder-width apart",
+      "Hold barbell at shoulder level",
+      "Press bar overhead while keeping core tight",
+      "Lower bar back to starting position"
+    ],
+    tips: "Keep your core engaged and avoid arching your back",
+    youtubeUrl: "https://youtu.be/2yjwXTZQDDg",
+    calories: 150,
+    equipment: ["barbell"],
+    variations: ["Dumbbell Press", "Push Press", "Arnold Press"]
+  },
+  {
+    name: "Dumbbell Flyes",
+    category: "push",
+    muscleGroups: ["chest"],
+    difficulty: "beginner",
+    estimatedTime: "25 minutes",
+    benefits: ["Chest isolation", "Muscle definition", "Range of motion"],
+    instructions: [
+      "Lie on bench with dumbbells held above chest",
+      "Lower dumbbells in arc motion",
+      "Feel stretch in chest muscles",
+      "Return to starting position"
+    ],
+    tips: "Keep slight bend in elbows throughout movement",
+    youtubeUrl: "https://youtu.be/eozdVDA78K0",
+    calories: 120,
+    equipment: ["dumbbells", "bench"],
+    variations: ["Cable Flyes", "Incline Flyes", "Decline Flyes"]
+  },
+  {
+    name: "Tricep Dips",
+    category: "push",
+    muscleGroups: ["triceps", "chest"],
+    difficulty: "beginner",
+    estimatedTime: "20 minutes",
+    benefits: ["Tricep strength", "Bodyweight exercise", "Compound movement"],
+    instructions: [
+      "Grip parallel bars with arms extended",
+      "Lower body by bending elbows",
+      "Keep elbows close to body",
+      "Push back up to starting position"
+    ],
+    tips: "Keep your body upright and avoid swinging",
+    youtubeUrl: "https://youtu.be/2z8JmcrW-As",
+    calories: 100,
+    equipment: ["parallel bars"],
+    variations: ["Ring Dips", "Assisted Dips", "Weighted Dips"]
+  },
+
+  // Pull Day Exercises
+  {
+    name: "Deadlift",
+    category: "pull",
+    muscleGroups: ["back", "legs", "core"],
+    difficulty: "advanced",
+    estimatedTime: "60 minutes",
+    benefits: ["Full body strength", "Posture improvement", "Hip hinge pattern"],
+    instructions: [
+      "Stand with feet hip-width apart",
+      "Grip bar with hands outside knees",
+      "Keep chest up and back straight",
+      "Lift bar by extending hips and knees"
+    ],
+    tips: "Focus on hip hinge movement, not squatting",
+    youtubeUrl: "https://youtu.be/1ZXobu7JvvE",
+    calories: 250,
+    equipment: ["barbell"],
+    variations: ["Romanian Deadlift", "Sumo Deadlift", "Trap Bar Deadlift"]
+  },
+  {
+    name: "Pull-ups",
+    category: "pull",
+    muscleGroups: ["back", "biceps"],
+    difficulty: "intermediate",
+    estimatedTime: "30 minutes",
+    benefits: ["Upper body strength", "Back development", "Bodyweight exercise"],
+    instructions: [
+      "Hang from pull-up bar with hands wider than shoulders",
+      "Pull body up until chin over bar",
+      "Lower body with control",
+      "Repeat movement"
+    ],
+    tips: "Engage your lats and avoid swinging",
+    youtubeUrl: "https://youtu.be/eGo4IYlbE5g",
+    calories: 140,
+    equipment: ["pull-up bar"],
+    variations: ["Assisted Pull-ups", "Wide Grip Pull-ups", "Weighted Pull-ups"]
+  },
+  {
+    name: "Barbell Rows",
+    category: "pull",
+    muscleGroups: ["back", "biceps"],
+    difficulty: "intermediate",
+    estimatedTime: "40 minutes",
+    benefits: ["Back thickness", "Posture correction", "Compound movement"],
+    instructions: [
+      "Bend at hips and knees, chest parallel to ground",
+      "Grip bar with hands shoulder-width apart",
+      "Pull bar to lower chest",
+      "Lower bar with control"
+    ],
+    tips: "Keep your back straight and squeeze shoulder blades",
+    youtubeUrl: "https://youtu.be/9efgcAjQe7E",
+    calories: 180,
+    equipment: ["barbell"],
+    variations: ["Dumbbell Rows", "T-Bar Rows", "Cable Rows"]
+  },
+  {
+    name: "Bicep Curls",
+    category: "pull",
+    muscleGroups: ["biceps"],
+    difficulty: "beginner",
+    estimatedTime: "25 minutes",
+    benefits: ["Arm development", "Isolation exercise", "Muscle definition"],
+    instructions: [
+      "Stand with dumbbells at sides",
+      "Curl dumbbells up to shoulders",
+      "Lower dumbbells with control",
+      "Repeat movement"
+    ],
+    tips: "Keep elbows at sides and avoid swinging",
+    youtubeUrl: "https://youtu.be/ykJmrZ5v0Oo",
+    calories: 100,
+    equipment: ["dumbbells"],
+    variations: ["Hammer Curls", "Preacher Curls", "Cable Curls"]
+  },
+
+  // Leg Day Exercises
+  {
+    name: "Squats",
+    category: "legs",
+    muscleGroups: ["quadriceps", "glutes", "hamstrings"],
+    difficulty: "intermediate",
+    estimatedTime: "50 minutes",
+    benefits: ["Lower body strength", "Core stability", "Functional movement"],
+    instructions: [
+      "Stand with feet shoulder-width apart",
+      "Lower body as if sitting back",
+      "Keep knees in line with toes",
+      "Return to standing position"
+    ],
+    tips: "Keep chest up and weight in heels",
+    youtubeUrl: "https://youtu.be/YaXPRqUwqQw",
+    calories: 200,
+    equipment: ["barbell"],
+    variations: ["Bodyweight Squats", "Front Squats", "Goblet Squats"]
+  },
+  {
+    name: "Romanian Deadlift",
+    category: "legs",
+    muscleGroups: ["hamstrings", "glutes", "lower back"],
+    difficulty: "intermediate",
+    estimatedTime: "35 minutes",
+    benefits: ["Hamstring development", "Hip hinge pattern", "Posterior chain"],
+    instructions: [
+      "Stand with feet hip-width apart",
+      "Hinge at hips, keeping legs straight",
+      "Lower bar along legs",
+      "Return to standing position"
+    ],
+    tips: "Feel stretch in hamstrings, not lower back",
+    youtubeUrl: "https://youtu.be/1Tq3QdYUuHs",
+    calories: 160,
+    equipment: ["barbell"],
+    variations: ["Dumbbell RDL", "Single Leg RDL", "Cable RDL"]
+  },
+  {
+    name: "Leg Press",
+    category: "legs",
+    muscleGroups: ["quadriceps", "glutes"],
+    difficulty: "beginner",
+    estimatedTime: "40 minutes",
+    benefits: ["Leg strength", "Machine safety", "High volume potential"],
+    instructions: [
+      "Sit in leg press machine",
+      "Place feet shoulder-width on platform",
+      "Press platform away from body",
+      "Return to starting position"
+    ],
+    tips: "Keep lower back pressed against seat",
+    youtubeUrl: "https://youtu.be/IZxyjW7MPJQ",
+    calories: 180,
+    equipment: ["leg press machine"],
+    variations: ["High Foot Placement", "Low Foot Placement", "Single Leg Press"]
+  },
+  {
+    name: "Calf Raises",
+    category: "legs",
+    muscleGroups: ["calves"],
+    difficulty: "beginner",
+    estimatedTime: "20 minutes",
+    benefits: ["Calf development", "Ankle stability", "Lower leg strength"],
+    instructions: [
+      "Stand on edge of step or platform",
+      "Raise heels as high as possible",
+      "Lower heels below step level",
+      "Repeat movement"
+    ],
+    tips: "Focus on full range of motion",
+    youtubeUrl: "https://youtu.be/JbyjNymZOt0",
+    calories: 80,
+    equipment: ["step or platform"],
+    variations: ["Seated Calf Raises", "Donkey Calf Raises", "Single Leg Raises"]
+  },
+
+  // Cardio Exercises
+  {
+    name: "Running",
+    category: "cardio",
+    muscleGroups: ["legs", "core"],
+    difficulty: "beginner",
+    estimatedTime: "30-60 minutes",
+    benefits: ["Cardiovascular health", "Endurance", "Calorie burn"],
+    instructions: [
+      "Start with proper warm-up",
+      "Maintain steady pace",
+      "Focus on breathing rhythm",
+      "Cool down properly"
+    ],
+    tips: "Start slow and gradually increase intensity",
+    youtubeUrl: "https://youtu.be/5bEP0aJhxqY",
+    calories: 300,
+    equipment: ["running shoes"],
+    variations: ["Sprint Intervals", "Long Distance", "Trail Running"]
+  },
+  {
+    name: "Cycling",
+    category: "cardio",
+    muscleGroups: ["legs"],
+    difficulty: "beginner",
+    estimatedTime: "45-90 minutes",
+    benefits: ["Low impact cardio", "Leg strength", "Endurance"],
+    instructions: [
+      "Adjust seat to proper height",
+      "Maintain steady cadence",
+      "Vary resistance levels",
+      "Stay hydrated"
+    ],
+    tips: "Keep your core engaged and maintain good posture",
+    youtubeUrl: "https://youtu.be/7yqJj7WqX7I",
+    calories: 250,
+    equipment: ["bicycle or stationary bike"],
+    variations: ["Indoor Cycling", "Mountain Biking", "Road Cycling"]
+  },
+  {
+    name: "Jump Rope",
+    category: "cardio",
+    muscleGroups: ["legs", "shoulders", "core"],
+    difficulty: "beginner",
+    estimatedTime: "15-30 minutes",
+    benefits: ["Coordination", "Cardiovascular fitness", "Full body workout"],
+    instructions: [
+      "Hold rope handles at hip level",
+      "Jump with both feet together",
+      "Keep jumps small and controlled",
+      "Maintain rhythm"
+    ],
+    tips: "Start slow and focus on form before speed",
+    youtubeUrl: "https://youtu.be/1BZM2Vre5oc",
+    calories: 200,
+    equipment: ["jump rope"],
+    variations: ["Single Leg Jumps", "High Knees", "Double Unders"]
+  },
+
+  // Modern Pilates
+  {
+    name: "Pilates Hundred",
+    category: "pilates",
+    muscleGroups: ["core", "shoulders"],
+    difficulty: "beginner",
+    estimatedTime: "10 minutes",
+    benefits: ["Core strength", "Breathing control", "Mind-body connection"],
+    instructions: [
+      "Lie on back with knees bent",
+      "Lift head and shoulders off mat",
+      "Extend arms and legs",
+      "Pump arms up and down 100 times"
+    ],
+    tips: "Keep your core engaged and maintain steady breathing",
+    youtubeUrl: "https://youtu.be/8jqXqQqQqQ",
+    calories: 60,
+    equipment: ["mat"],
+    variations: ["Modified Hundred", "Advanced Hundred", "Standing Hundred"]
+  },
+  {
+    name: "Pilates Roll Up",
+    category: "pilates",
+    muscleGroups: ["core", "back"],
+    difficulty: "intermediate",
+    estimatedTime: "15 minutes",
+    benefits: ["Spinal flexibility", "Core control", "Posture improvement"],
+    instructions: [
+      "Lie on back with arms overhead",
+      "Roll up vertebra by vertebra",
+      "Reach toward toes",
+      "Roll back down with control"
+    ],
+    tips: "Move slowly and feel each vertebra",
+    youtubeUrl: "https://youtu.be/9jqXqQqQqQ",
+    calories: 80,
+    equipment: ["mat"],
+    variations: ["Modified Roll Up", "Roll Up with Twist", "Standing Roll Up"]
+  },
+
+  // Le Sserafim Style HIIT
+  {
+    name: "High Knees",
+    category: "hiit",
+    muscleGroups: ["legs", "core"],
+    difficulty: "beginner",
+    estimatedTime: "20 minutes",
+    benefits: ["Cardiovascular fitness", "Coordination", "High intensity"],
+    instructions: [
+      "Stand in place or jog slowly",
+      "Drive knees up toward chest",
+      "Pump arms in rhythm",
+      "Maintain high tempo"
+    ],
+    tips: "Keep your core engaged and land softly",
+    youtubeUrl: "https://youtu.be/7jqXqQqQqQ",
+    calories: 150,
+    equipment: ["none"],
+    variations: ["High Knees with Twist", "High Knees with Punch", "High Knees Sprint"]
+  },
+  {
+    name: "Burpees",
+    category: "hiit",
+    muscleGroups: ["full body"],
+    difficulty: "intermediate",
+    estimatedTime: "25 minutes",
+    benefits: ["Full body workout", "High intensity", "Calorie burn"],
+    instructions: [
+      "Start standing, drop to plank",
+      "Perform push-up",
+      "Jump feet forward",
+      "Jump up with arms overhead"
+    ],
+    tips: "Maintain good form even when tired",
+    youtubeUrl: "https://youtu.be/8jqXqQqQqQ",
+    calories: 180,
+    equipment: ["none"],
+    variations: ["Modified Burpees", "Burpee Pull-ups", "Burpee Box Jumps"]
+  },
+  {
+    name: "Mountain Climbers",
+    category: "hiit",
+    muscleGroups: ["core", "shoulders", "legs"],
+    difficulty: "beginner",
+    estimatedTime: "15 minutes",
+    benefits: ["Core strength", "Cardiovascular fitness", "Coordination"],
+    instructions: [
+      "Start in plank position",
+      "Drive knees alternately toward chest",
+      "Keep hips level",
+      "Maintain steady pace"
+    ],
+    tips: "Keep your core tight and avoid hip movement",
+    youtubeUrl: "https://youtu.be/9jqXqQqQqQ",
+    calories: 120,
+    equipment: ["none"],
+    variations: ["Cross Body Climbers", "Spider Climbers", "Mountain Climber Twist"]
+  },
+
+  // Yoga/Meditation
+  {
+    name: "Sun Salutation",
+    category: "yoga",
+    muscleGroups: ["full body"],
+    difficulty: "beginner",
+    estimatedTime: "20 minutes",
+    benefits: ["Flexibility", "Mind-body connection", "Stress relief"],
+    instructions: [
+      "Start in mountain pose",
+      "Forward fold",
+      "Half lift",
+      "Plank to chaturanga",
+      "Upward dog",
+      "Downward dog",
+      "Return to standing"
+    ],
+    tips: "Move with your breath and focus on alignment",
+    youtubeUrl: "https://youtu.be/10jqXqQqQq",
+    calories: 100,
+    equipment: ["mat"],
+    variations: ["Modified Sun Salutation", "Power Sun Salutation", "Gentle Sun Salutation"]
+  },
+  {
+    name: "Warrior Pose",
+    category: "yoga",
+    muscleGroups: ["legs", "core", "shoulders"],
+    difficulty: "beginner",
+    estimatedTime: "15 minutes",
+    benefits: ["Leg strength", "Balance", "Focus"],
+    instructions: [
+      "Step one foot back",
+      "Bend front knee to 90 degrees",
+      "Arms overhead or at sides",
+      "Hold pose with steady breath"
+    ],
+    tips: "Keep your back leg straight and front knee over ankle",
+    youtubeUrl: "https://youtu.be/11jqXqQqQq",
+    calories: 80,
+    equipment: ["mat"],
+    variations: ["Warrior I", "Warrior II", "Warrior III"]
+  }
+];
+
+// AI-powered workout suggestion service
+class WorkoutSuggestionService {
+  static searchCache = new Map();
+  
+  static async getWorkoutSuggestions(query) {
+    const searchTerm = query.toLowerCase();
+    const cacheKey = `workout_suggestions_${searchTerm}`;
+    
+    // Check cache first
+    if (this.searchCache.has(cacheKey)) {
+      return this.searchCache.get(cacheKey);
+    }
+    
+    // Search in database
+    const suggestions = workoutDatabase
+      .filter(workout => 
+        workout.name.toLowerCase().includes(searchTerm) ||
+        workout.muscleGroups.some(muscle => 
+          muscle.toLowerCase().includes(searchTerm)
+        ) ||
+        workout.benefits.some(benefit => 
+          benefit.toLowerCase().includes(searchTerm)
+        )
+      )
+      .slice(0, 5)
+      .map(workout => workout.name);
+    
+    this.searchCache.set(cacheKey, suggestions);
+    return suggestions;
+  }
+  
+  static estimateWorkoutFromName(workoutName) {
+    const name = workoutName.toLowerCase();
+    
+    // Quick estimation based on workout characteristics
+    if (name.includes('cardio') || name.includes('run') || name.includes('jog')) {
+      return {
+        name: workoutName,
+        category: "cardio",
+        muscleGroups: ["legs", "core"],
+        difficulty: "beginner",
+        estimatedTime: "30 minutes",
+        benefits: ["Cardiovascular health", "Endurance", "Calorie burn"],
+        instructions: ["Start with warm-up", "Maintain steady pace", "Focus on breathing", "Cool down properly"],
+        tips: "Start slow and gradually increase intensity",
+        youtubeUrl: "https://youtu.be/generic-cardio",
+        calories: 250,
+        equipment: ["comfortable shoes"],
+        variations: ["Interval Training", "Long Distance", "Tempo Runs"]
+      };
+    }
+    
+    if (name.includes('strength') || name.includes('weight') || name.includes('lift')) {
+      return {
+        name: workoutName,
+        category: "strength",
+        muscleGroups: ["full body"],
+        difficulty: "intermediate",
+        estimatedTime: "45 minutes",
+        benefits: ["Muscle building", "Strength gains", "Metabolic boost"],
+        instructions: ["Warm up properly", "Focus on form", "Progressive overload", "Rest between sets"],
+        tips: "Quality over quantity - proper form is key",
+        youtubeUrl: "https://youtu.be/generic-strength",
+        calories: 200,
+        equipment: ["weights"],
+        variations: ["Bodyweight", "Dumbbells", "Barbell"]
+      };
+    }
+    
+    if (name.includes('yoga') || name.includes('stretch') || name.includes('flexibility')) {
+      return {
+        name: workoutName,
+        category: "yoga",
+        muscleGroups: ["full body"],
+        difficulty: "beginner",
+        estimatedTime: "30 minutes",
+        benefits: ["Flexibility", "Stress relief", "Mind-body connection"],
+        instructions: ["Breathe deeply", "Move slowly", "Listen to your body", "Hold poses"],
+        tips: "Don't force any movements - go to your edge, not beyond",
+        youtubeUrl: "https://youtu.be/generic-yoga",
+        calories: 120,
+        equipment: ["mat"],
+        variations: ["Gentle Yoga", "Power Yoga", "Restorative Yoga"]
+      };
+    }
+    
+    if (name.includes('hiit') || name.includes('interval') || name.includes('circuit')) {
+      return {
+        name: workoutName,
+        category: "hiit",
+        muscleGroups: ["full body"],
+        difficulty: "intermediate",
+        estimatedTime: "25 minutes",
+        benefits: ["High intensity", "Calorie burn", "Metabolic boost"],
+        instructions: ["Warm up thoroughly", "Work hard during intervals", "Rest between sets", "Cool down"],
+        tips: "Push yourself but maintain good form",
+        youtubeUrl: "https://youtu.be/generic-hiit",
+        calories: 300,
+        equipment: ["none"],
+        variations: ["Tabata", "Circuit Training", "AMRAP"]
+      };
+    }
+    
+    // Default estimation
+    return {
+      name: workoutName,
+      category: "general",
+      muscleGroups: ["full body"],
+      difficulty: "beginner",
+      estimatedTime: "30 minutes",
+      benefits: ["General fitness", "Health improvement", "Energy boost"],
+      instructions: ["Start with warm-up", "Maintain steady pace", "Listen to your body", "Cool down"],
+      tips: "Consistency is key - start where you're comfortable",
+      youtubeUrl: "https://youtu.be/generic-workout",
+      calories: 150,
+      equipment: ["none"],
+      variations: ["Beginner", "Intermediate", "Advanced"]
+    };
+  }
+  
+  static getAllWorkouts() {
+    return workoutDatabase.map(workout => workout.name);
+  }
+  
+  static getWorkoutsByCategory(category) {
+    return workoutDatabase
+      .filter(workout => workout.category === category)
+      .map(workout => workout.name);
+  }
+  
+  static getWorkoutByName(name) {
+    return workoutDatabase.find(workout => 
+      workout.name.toLowerCase() === name.toLowerCase()
+    );
+  }
+  
+  static clearCache() {
+    this.searchCache.clear();
+  }
+}
+
+const WorkoutSidebar = ({ onWorkoutSelect, selectedWorkout }) => {
   const [showCustomForm, setShowCustomForm] = useState(false);
   const [hoveredWorkout, setHoveredWorkout] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedBodyPart, setSelectedBodyPart] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState('all');
+  const [expandedWorkout, setExpandedWorkout] = useState(null);
+  const [searchSuggestions, setSearchSuggestions] = useState([]);
+  const [isEstimating, setIsEstimating] = useState(false);
 
-  // Body part filter options
-  const bodyParts = [
-    { value: 'all', label: 'All Body Parts' },
-    { value: 'chest', label: 'Chest' },
-    { value: 'back', label: 'Back' },
-    { value: 'shoulders', label: 'Shoulders' },
-    { value: 'arms', label: 'Arms' },
-    { value: 'core', label: 'Core' },
-    { value: 'legs', label: 'Legs' },
-    { value: 'glutes', label: 'Glutes' },
+  // Category filter options
+  const categories = [
+    { value: 'all', label: 'All Categories' },
+    { value: 'push', label: 'Push Day' },
+    { value: 'pull', label: 'Pull Day' },
+    { value: 'legs', label: 'Leg Day' },
     { value: 'cardio', label: 'Cardio' },
-    { value: 'full_body', label: 'Full Body' }
+    { value: 'pilates', label: 'Pilates' },
+    { value: 'hiit', label: 'HIIT' },
+    { value: 'yoga', label: 'Yoga/Meditation' }
   ];
 
-  // Difficulty levels
+  // Difficulty filter options
   const difficulties = [
     { value: 'all', label: 'All Levels' },
     { value: 'beginner', label: 'Beginner' },
@@ -32,632 +612,49 @@ const WorkoutSidebar = () => {
     { value: 'advanced', label: 'Advanced' }
   ];
 
-  // Comprehensive workout database with realistic options
-  const workoutCategories = {
-    strength_training: {
-      name: "Strength Training",
-      workouts: [
-        // Chest Exercises
-        {
-          name: "Bench Press",
-          category: "Push",
-          bodyParts: ["chest", "triceps", "shoulders"],
-          difficulty: "intermediate",
-          timeEstimate: "45 minutes",
-          sets: "3-4",
-          reps: "8-12",
-          equipment: "Barbell, Bench",
-          description: "Compound movement for chest development and pressing strength",
-          youtubeUrl: "https://youtu.be/rT7DgCr-3pg",
-          benefits: "Builds chest strength and size, improves pressing power, develops triceps"
-        },
-        {
-          name: "Incline Dumbbell Press",
-          category: "Push",
-          bodyParts: ["chest", "triceps", "shoulders"],
-          difficulty: "intermediate",
-          timeEstimate: "40 minutes",
-          sets: "3",
-          reps: "10-12",
-          equipment: "Dumbbells, Bench",
-          description: "Targets upper chest development with dumbbell variation",
-          youtubeUrl: "https://youtu.be/8iNEnVn-8Qc",
-          benefits: "Upper chest focus, shoulder stability, unilateral strength"
-        },
-        {
-          name: "Decline Push-ups",
-          category: "Push",
-          bodyParts: ["chest", "triceps", "shoulders"],
-          difficulty: "beginner",
-          timeEstimate: "20 minutes",
-          sets: "3",
-          reps: "10-15",
-          equipment: "None",
-          description: "Bodyweight exercise targeting lower chest",
-          youtubeUrl: "https://youtu.be/0PkyZ7ejg-o",
-          benefits: "No equipment needed, chest development, core engagement"
-        },
-        // Back Exercises
-        {
-          name: "Pull-ups",
-          category: "Pull",
-          bodyParts: ["back", "biceps", "shoulders"],
-          difficulty: "intermediate",
-          timeEstimate: "30 minutes",
-          sets: "3",
-          reps: "8-12",
-          equipment: "Pull-up Bar",
-          description: "Compound back exercise for width and pulling strength",
-          youtubeUrl: "https://youtu.be/eGo4IYlbE5g",
-          benefits: "Back width, grip strength, bodyweight exercise"
-        },
-        {
-          name: "Barbell Rows",
-          category: "Pull",
-          bodyParts: ["back", "biceps"],
-          difficulty: "intermediate",
-          timeEstimate: "35 minutes",
-          sets: "3-4",
-          reps: "8-12",
-          equipment: "Barbell",
-          description: "Thickens middle back and improves posture",
-          youtubeUrl: "https://youtu.be/9efgcAjQe7E",
-          benefits: "Back thickness, posture improvement, compound movement"
-        },
-        {
-          name: "Lat Pulldowns",
-          category: "Pull",
-          bodyParts: ["back", "biceps"],
-          difficulty: "beginner",
-          timeEstimate: "25 minutes",
-          sets: "3",
-          reps: "10-12",
-          equipment: "Cable Machine",
-          description: "Machine-based lat development exercise",
-          youtubeUrl: "https://youtu.be/CAwf7n6Luuc",
-          benefits: "Lat width, beginner friendly, controlled movement"
-        },
-        // Shoulder Exercises
-        {
-          name: "Overhead Press",
-          category: "Push",
-          bodyParts: ["shoulders", "triceps"],
-          difficulty: "intermediate",
-          timeEstimate: "30 minutes",
-          sets: "3-4",
-          reps: "8-12",
-          equipment: "Barbell",
-          description: "Develops shoulder strength and stability",
-          youtubeUrl: "https://youtu.be/2yjwXTZQDDg",
-          benefits: "Shoulder strength, core stability, pressing power"
-        },
-        {
-          name: "Lateral Raises",
-          category: "Push",
-          bodyParts: ["shoulders"],
-          difficulty: "beginner",
-          timeEstimate: "20 minutes",
-          sets: "3",
-          reps: "12-15",
-          equipment: "Dumbbells",
-          description: "Isolates lateral deltoids for shoulder width",
-          youtubeUrl: "https://youtu.be/3VcKaXpzqRo",
-          benefits: "Shoulder width, isolation exercise, light weight"
-        },
-        // Arm Exercises
-        {
-          name: "Bicep Curls",
-          category: "Pull",
-          bodyParts: ["arms"],
-          difficulty: "beginner",
-          timeEstimate: "20 minutes",
-          sets: "3",
-          reps: "12-15",
-          equipment: "Dumbbells",
-          description: "Classic bicep isolation exercise",
-          youtubeUrl: "https://youtu.be/ykJmrZ5v0Oa",
-          benefits: "Bicep development, simple movement, beginner friendly"
-        },
-        {
-          name: "Tricep Dips",
-          category: "Push",
-          bodyParts: ["arms", "chest"],
-          difficulty: "intermediate",
-          timeEstimate: "25 minutes",
-          sets: "3",
-          reps: "8-12",
-          equipment: "Dip Bars",
-          description: "Compound movement for tricep development",
-          youtubeUrl: "https://youtu.be/2z8JmcrW-As",
-          benefits: "Tricep strength, chest involvement, bodyweight"
-        },
-        // Leg Exercises
-        {
-          name: "Squats",
-          category: "Legs",
-          bodyParts: ["legs", "glutes", "core"],
-          difficulty: "intermediate",
-          timeEstimate: "45 minutes",
-          sets: "3-4",
-          reps: "8-12",
-          equipment: "Barbell",
-          description: "King of leg exercises, builds overall leg strength",
-          youtubeUrl: "https://youtu.be/YaXPRqUwItQ",
-          benefits: "Full leg development, core strength, compound movement"
-        },
-        {
-          name: "Romanian Deadlifts",
-          category: "Legs",
-          bodyParts: ["legs", "glutes", "back"],
-          difficulty: "intermediate",
-          timeEstimate: "40 minutes",
-          sets: "3-4",
-          reps: "8-12",
-          equipment: "Barbell",
-          description: "Targets hamstrings and improves hip hinge",
-          youtubeUrl: "https://youtu.be/1ED-obD0G0Y",
-          benefits: "Hamstring development, hip mobility, posterior chain"
-        },
-        {
-          name: "Leg Press",
-          category: "Legs",
-          bodyParts: ["legs", "glutes"],
-          difficulty: "beginner",
-          timeEstimate: "30 minutes",
-          sets: "3",
-          reps: "10-12",
-          equipment: "Leg Press Machine",
-          description: "Machine-based quad development",
-          youtubeUrl: "https://youtu.be/IZxyjW7MP2Q",
-          benefits: "Quad development, beginner friendly, controlled movement"
-        }
-      ]
-    },
-    pilates: {
-      name: "Pilates",
-      workouts: [
-        {
-          name: "Pilates Mat Workout",
-          category: "Pilates",
-          bodyParts: ["core", "full_body"],
-          difficulty: "beginner",
-          timeEstimate: "45 minutes",
-          sets: "1",
-          reps: "Full routine",
-          equipment: "Mat",
-          description: "Complete Pilates mat workout for core strength and flexibility",
-          youtubeUrl: "https://youtu.be/0krBwqXgGtY",
-          benefits: "Core strength, flexibility, mind-body connection, posture"
-        },
-        {
-          name: "Pilates for Beginners",
-          category: "Pilates",
-          bodyParts: ["core", "full_body"],
-          difficulty: "beginner",
-          timeEstimate: "30 minutes",
-          sets: "1",
-          reps: "Full routine",
-          equipment: "Mat",
-          description: "Gentle introduction to Pilates fundamentals",
-          youtubeUrl: "https://youtu.be/0krBwqXgGtY",
-          benefits: "Core activation, breathing, basic movements"
-        },
-        {
-          name: "Advanced Pilates",
-          category: "Pilates",
-          bodyParts: ["core", "full_body"],
-          difficulty: "advanced",
-          timeEstimate: "60 minutes",
-          sets: "1",
-          reps: "Full routine",
-          equipment: "Mat",
-          description: "Challenging Pilates workout for experienced practitioners",
-          youtubeUrl: "https://youtu.be/0krBwqXgGtY",
-          benefits: "Advanced core control, strength, flexibility"
-        }
-      ]
-    },
-    yoga: {
-      name: "Yoga",
-      workouts: [
-        {
-          name: "15 Minute Meditation",
-          category: "Yoga",
-          bodyParts: ["mind", "core"],
-          difficulty: "beginner",
-          timeEstimate: "15 minutes",
-          sets: "1",
-          reps: "Guided session",
-          equipment: "Mat",
-          description: "Short meditation session for mindfulness and stress relief",
-          youtubeUrl: "https://youtu.be/inpok4MKVLM",
-          benefits: "Stress reduction, mental clarity, mindfulness"
-        },
-        {
-          name: "30 Minute Meditation",
-          category: "Yoga",
-          bodyParts: ["mind", "core"],
-          difficulty: "intermediate",
-          timeEstimate: "30 minutes",
-          sets: "1",
-          reps: "Guided session",
-          equipment: "Mat",
-          description: "Extended meditation for deeper relaxation",
-          youtubeUrl: "https://youtu.be/inpok4MKVLM",
-          benefits: "Deep relaxation, mental focus, stress management"
-        },
-        {
-          name: "45 Minute Meditation",
-          category: "Yoga",
-          bodyParts: ["mind", "core"],
-          difficulty: "intermediate",
-          timeEstimate: "45 minutes",
-          sets: "1",
-          reps: "Guided session",
-          equipment: "Mat",
-          description: "Longer meditation session for experienced practitioners",
-          youtubeUrl: "https://youtu.be/inpok4MKVLM",
-          benefits: "Deep mental clarity, extended relaxation"
-        },
-        {
-          name: "1 Hour Meditation",
-          category: "Yoga",
-          bodyParts: ["mind", "core"],
-          difficulty: "advanced",
-          timeEstimate: "60 minutes",
-          sets: "1",
-          reps: "Guided session",
-          equipment: "Mat",
-          description: "Extended meditation for advanced practitioners",
-          youtubeUrl: "https://youtu.be/inpok4MKVLM",
-          benefits: "Deep mental state, advanced mindfulness"
-        },
-        {
-          name: "Vinyasa Flow",
-          category: "Yoga",
-          bodyParts: ["full_body", "core"],
-          difficulty: "intermediate",
-          timeEstimate: "45 minutes",
-          sets: "1",
-          reps: "Full flow",
-          equipment: "Mat",
-          description: "Dynamic yoga flow connecting breath with movement",
-          youtubeUrl: "https://youtu.be/9WzX7ODGI84",
-          benefits: "Flexibility, strength, breath control, flow"
-        },
-        {
-          name: "Hatha Yoga",
-          category: "Yoga",
-          bodyParts: ["full_body", "core"],
-          difficulty: "beginner",
-          timeEstimate: "30 minutes",
-          sets: "1",
-          reps: "Full session",
-          equipment: "Mat",
-          description: "Gentle yoga focusing on basic poses and breathing",
-          youtubeUrl: "https://youtu.be/9WzX7ODGI84",
-          benefits: "Flexibility, relaxation, basic poses, breathing"
-        },
-        {
-          name: "Power Yoga",
-          category: "Yoga",
-          bodyParts: ["full_body", "core"],
-          difficulty: "advanced",
-          timeEstimate: "60 minutes",
-          sets: "1",
-          reps: "Full session",
-          equipment: "Mat",
-          description: "Intense yoga workout combining strength and flexibility",
-          youtubeUrl: "https://youtu.be/9WzX7ODGI84",
-          benefits: "Strength, flexibility, endurance, mental focus"
-        }
-      ]
-    },
-    hiit: {
-      name: "HIIT & Cardio",
-      workouts: [
-        {
-          name: "15 Minute HIIT",
-          category: "HIIT",
-          bodyParts: ["full_body", "cardio"],
-          difficulty: "beginner",
-          timeEstimate: "15 minutes",
-          sets: "1",
-          reps: "Full session",
-          equipment: "None",
-          description: "High intensity interval training for quick cardio",
-          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
-          benefits: "Quick cardio, fat burning, time efficient"
-        },
-        {
-          name: "30 Minute HIIT",
-          category: "HIIT",
-          bodyParts: ["full_body", "cardio"],
-          difficulty: "intermediate",
-          timeEstimate: "30 minutes",
-          sets: "1",
-          reps: "Full session",
-          equipment: "None",
-          description: "Extended high intensity interval training",
-          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
-          benefits: "Cardio endurance, fat burning, strength"
-        },
-        {
-          name: "45 Minute HIIT",
-          category: "HIIT",
-          bodyParts: ["full_body", "cardio"],
-          difficulty: "advanced",
-          timeEstimate: "45 minutes",
-          sets: "1",
-          reps: "Full session",
-          equipment: "None",
-          description: "Longer high intensity interval training session",
-          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
-          benefits: "Extended cardio, endurance, strength"
-        },
-        {
-          name: "15 Minute Run",
-          category: "Cardio",
-          bodyParts: ["legs", "cardio"],
-          difficulty: "beginner",
-          timeEstimate: "15 minutes",
-          sets: "1",
-          reps: "Steady pace",
-          equipment: "Treadmill/Track",
-          description: "Steady state cardio endurance",
-          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
-          benefits: "Cardio fitness, leg strength, endurance"
-        },
-        {
-          name: "30 Minute Run",
-          category: "Cardio",
-          bodyParts: ["legs", "cardio"],
-          difficulty: "intermediate",
-          timeEstimate: "30 minutes",
-          sets: "1",
-          reps: "Steady pace",
-          equipment: "Treadmill/Track",
-          description: "Extended cardio endurance",
-          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
-          benefits: "Extended cardio, endurance building"
-        },
-        {
-          name: "45 Minute Run",
-          category: "Cardio",
-          bodyParts: ["legs", "cardio"],
-          difficulty: "intermediate",
-          timeEstimate: "45 minutes",
-          sets: "1",
-          reps: "Steady pace",
-          equipment: "Treadmill/Track",
-          description: "Long distance cardio training",
-          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
-          benefits: "Long distance cardio, endurance"
-        },
-        {
-          name: "1 Hour Run",
-          category: "Cardio",
-          bodyParts: ["legs", "cardio"],
-          difficulty: "advanced",
-          timeEstimate: "60 minutes",
-          sets: "1",
-          reps: "Steady pace",
-          equipment: "Treadmill/Track",
-          description: "Endurance building and fat burning",
-          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
-          benefits: "Endurance, fat burning, mental toughness"
-        },
-        {
-          name: "2 Hour Run",
-          category: "Cardio",
-          bodyParts: ["legs", "cardio"],
-          difficulty: "advanced",
-          timeEstimate: "120 minutes",
-          sets: "1",
-          reps: "Steady pace",
-          equipment: "Treadmill/Track",
-          description: "Ultra endurance training",
-          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
-          benefits: "Ultra endurance, mental strength"
-        },
-        {
-          name: "Cycling Intervals",
-          category: "Cardio",
-          bodyParts: ["legs", "cardio"],
-          difficulty: "intermediate",
-          timeEstimate: "30 minutes",
-          sets: "6",
-          reps: "2 minutes hard, 1 minute easy",
-          equipment: "Stationary Bike",
-          description: "Low impact high intensity cardio",
-          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
-          benefits: "Low impact, high intensity, leg strength"
-        },
-        {
-          name: "Rowing Intervals",
-          category: "Cardio",
-          bodyParts: ["full_body", "cardio"],
-          difficulty: "intermediate",
-          timeEstimate: "25 minutes",
-          sets: "8",
-          reps: "1 minute hard, 1 minute easy",
-          equipment: "Rowing Machine",
-          description: "Full body cardio exercise",
-          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
-          benefits: "Full body cardio, low impact, strength"
-        }
-      ]
-    },
-    bodyweight: {
-      name: "Bodyweight",
-      workouts: [
-        {
-          name: "Push-ups",
-          category: "Bodyweight",
-          bodyParts: ["chest", "arms", "shoulders"],
-          difficulty: "beginner",
-          timeEstimate: "20 minutes",
-          sets: "3",
-          reps: "10-20",
-          equipment: "None",
-          description: "Classic upper body strength exercise",
-          youtubeUrl: "https://youtu.be/IODxDxX7oi4",
-          benefits: "Upper body strength, no equipment, scalable"
-        },
-        {
-          name: "Pull-ups",
-          category: "Bodyweight",
-          bodyParts: ["back", "arms"],
-          difficulty: "intermediate",
-          timeEstimate: "25 minutes",
-          sets: "3",
-          reps: "5-15",
-          equipment: "Pull-up Bar",
-          description: "Upper body pulling strength",
-          youtubeUrl: "https://youtu.be/eGo4IYlbE5g",
-          benefits: "Back strength, grip strength, bodyweight"
-        },
-        {
-          name: "Dips",
-          category: "Bodyweight",
-          bodyParts: ["arms", "chest"],
-          difficulty: "intermediate",
-          timeEstimate: "20 minutes",
-          sets: "3",
-          reps: "8-15",
-          equipment: "Dip Bars",
-          description: "Upper body pushing strength",
-          youtubeUrl: "https://youtu.be/2z8JmcrW-As",
-          benefits: "Tricep strength, chest involvement"
-        },
-        {
-          name: "Squats",
-          category: "Bodyweight",
-          bodyParts: ["legs", "glutes"],
-          difficulty: "beginner",
-          timeEstimate: "15 minutes",
-          sets: "3",
-          reps: "15-25",
-          equipment: "None",
-          description: "Lower body strength foundation",
-          youtubeUrl: "https://youtu.be/YaXPRqUwItQ",
-          benefits: "Leg strength, no equipment, scalable"
-        },
-        {
-          name: "Lunges",
-          category: "Bodyweight",
-          bodyParts: ["legs", "glutes"],
-          difficulty: "beginner",
-          timeEstimate: "20 minutes",
-          sets: "3",
-          reps: "10-15 each leg",
-          equipment: "None",
-          description: "Unilateral leg strength",
-          youtubeUrl: "https://youtu.be/3XDriUn0udo",
-          benefits: "Unilateral strength, balance, leg development"
-        },
-        {
-          name: "Plank",
-          category: "Bodyweight",
-          bodyParts: ["core"],
-          difficulty: "beginner",
-          timeEstimate: "15 minutes",
-          sets: "3",
-          reps: "30-60 seconds",
-          equipment: "None",
-          description: "Core stability and endurance",
-          youtubeUrl: "https://youtu.be/ASdvN_XEl_c",
-          benefits: "Core strength, stability, no equipment"
-        },
-        {
-          name: "Side Plank",
-          category: "Bodyweight",
-          bodyParts: ["core"],
-          difficulty: "intermediate",
-          timeEstimate: "15 minutes",
-          sets: "3",
-          reps: "30-45 seconds each side",
-          equipment: "None",
-          description: "Lateral core stability",
-          youtubeUrl: "https://youtu.be/ASdvN_XEl_c",
-          benefits: "Lateral core strength, balance"
-        },
-        {
-          name: "Glute Bridges",
-          category: "Bodyweight",
-          bodyParts: ["glutes", "core"],
-          difficulty: "beginner",
-          timeEstimate: "15 minutes",
-          sets: "3",
-          reps: "15-20",
-          equipment: "None",
-          description: "Glute activation and strength",
-          youtubeUrl: "https://youtu.be/OUgsJ8RpQqY",
-          benefits: "Glute activation, core engagement"
-        },
-        {
-          name: "Wall Sit",
-          category: "Bodyweight",
-          bodyParts: ["legs", "glutes"],
-          difficulty: "beginner",
-          timeEstimate: "10 minutes",
-          sets: "3",
-          reps: "30-60 seconds",
-          equipment: "Wall",
-          description: "Isometric leg strength",
-          youtubeUrl: "https://youtu.be/YaXPRqUwItQ",
-          benefits: "Isometric strength, endurance"
-        },
-        {
-          name: "Handstand Hold",
-          category: "Bodyweight",
-          bodyParts: ["shoulders", "core"],
-          difficulty: "advanced",
-          timeEstimate: "30 minutes",
-          sets: "3",
-          reps: "10-30 seconds",
-          equipment: "Wall",
-          description: "Advanced shoulder strength and balance",
-          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
-          benefits: "Shoulder strength, balance, advanced skill"
-        }
-      ]
+  // Enhanced search with AI suggestions
+  const handleSearchChange = async (value) => {
+    setSearchTerm(value);
+    
+    if (value.length > 1) {
+      try {
+        const suggestions = await WorkoutSuggestionService.getWorkoutSuggestions(value);
+        setSearchSuggestions(suggestions);
+      } catch (error) {
+        console.error('Search suggestions failed:', error);
+        setSearchSuggestions([]);
+      }
+    } else {
+      setSearchSuggestions([]);
     }
   };
 
-  // Search and filter functionality
+  // Filter workouts based on search and filters
   const filteredWorkouts = useMemo(() => {
-    let filtered = {};
+    let workouts = WorkoutSuggestionService.getAllWorkouts();
     
-    Object.entries(workoutCategories).forEach(([key, category]) => {
-      const filteredWorkouts = category.workouts.filter(workout => {
-        const matchesSearch = !searchTerm || 
-          workout.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          workout.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          workout.bodyParts.some(part => 
-            part.toLowerCase().includes(searchTerm.toLowerCase())
-          ) ||
-          workout.description.toLowerCase().includes(searchTerm.toLowerCase());
-        
-        const matchesBodyPart = selectedBodyPart === 'all' || 
-          workout.bodyParts.includes(selectedBodyPart);
-        
-        const matchesDifficulty = selectedDifficulty === 'all' || 
-          workout.difficulty === selectedDifficulty;
-        
-        return matchesSearch && matchesBodyPart && matchesDifficulty;
+    // Apply category filter
+    if (selectedCategory !== 'all') {
+      workouts = WorkoutSuggestionService.getWorkoutsByCategory(selectedCategory);
+    }
+    
+    // Apply difficulty filter
+    if (selectedDifficulty !== 'all') {
+      workouts = workouts.filter(workout => {
+        const workoutData = WorkoutSuggestionService.getWorkoutByName(workout);
+        return workoutData && workoutData.difficulty === selectedDifficulty;
       });
-      
-      if (filteredWorkouts.length > 0) {
-        filtered[key] = {
-          ...category,
-          workouts: filteredWorkouts
-        };
-      }
-    });
+    }
     
-    return filtered;
-  }, [searchTerm, selectedBodyPart, selectedDifficulty]);
+    // Apply search filter
+    if (searchTerm) {
+      workouts = workouts.filter(workout => 
+        workout.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    
+    return workouts.slice(0, 20); // Limit to 20 results
+  }, [searchTerm, selectedCategory, selectedDifficulty]);
 
   const handleWorkoutDrag = (e, workout) => {
     e.dataTransfer.setData('text/plain', JSON.stringify(workout));
@@ -666,6 +663,39 @@ const WorkoutSidebar = () => {
   const handleCustomWorkout = (customWorkout) => {
     toast.success('Custom workout added!');
     setShowCustomForm(false);
+    if (onWorkoutSelect) {
+      onWorkoutSelect(customWorkout);
+    }
+  };
+
+  const toggleWorkoutExpansion = (workoutId) => {
+    setExpandedWorkout(expandedWorkout === workoutId ? null : workoutId);
+  };
+
+  const handleWorkoutClick = async (workoutName) => {
+    try {
+      setIsEstimating(true);
+      let workoutData = WorkoutSuggestionService.getWorkoutByName(workoutName);
+      
+      if (!workoutData) {
+        // AI estimation for custom workouts
+        workoutData = WorkoutSuggestionService.estimateWorkoutFromName(workoutName);
+      }
+      
+      if (workoutData) {
+        toast.success(`${workoutName}: ${workoutData.estimatedTime}, ${workoutData.calories} calories`);
+        setExpandedWorkout(expandedWorkout === workoutName ? null : workoutName);
+        
+        // Call the parent component's workout select handler
+        if (onWorkoutSelect) {
+          onWorkoutSelect(workoutData);
+        }
+      }
+    } catch (error) {
+      toast.error('Could not get workout info');
+    } finally {
+      setIsEstimating(false);
+    }
   };
 
   return (
@@ -676,7 +706,7 @@ const WorkoutSidebar = () => {
       transition={{ duration: 0.5 }}
     >
       <div className="sidebar-header">
-        <h3>Suggested Workouts</h3>
+        <h3>Workout Plans</h3>
         <motion.button
           className="add-custom-btn"
           onClick={() => setShowCustomForm(true)}
@@ -687,37 +717,58 @@ const WorkoutSidebar = () => {
         </motion.button>
       </div>
 
-      {/* Search Bar */}
+      {/* Enhanced Search with AI Suggestions */}
       <div className="search-container">
         <input
           type="text"
-          placeholder="Search workouts..."
+          placeholder="Search workouts or type new workout name..."
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => handleSearchChange(e.target.value)}
           className="search-input"
         />
         {searchTerm && (
           <button
-            onClick={() => setSearchTerm('')}
+            onClick={() => {
+              setSearchTerm('');
+              setSearchSuggestions([]);
+            }}
             className="clear-search-btn"
           >
-            X
+            ×
           </button>
+        )}
+        
+        {/* AI Search Suggestions */}
+        {searchSuggestions.length > 0 && (
+          <div className="search-suggestions">
+            {searchSuggestions.map((suggestion, index) => (
+              <div
+                key={index}
+                className="suggestion-item"
+                onClick={() => {
+                  setSearchTerm(suggestion);
+                  setSearchSuggestions([]);
+                }}
+              >
+                {suggestion}
+              </div>
+            ))}
+          </div>
         )}
       </div>
 
       {/* Filter Controls */}
       <div className="filter-controls">
         <div className="filter-group">
-          <label>Body Part:</label>
+          <label>Category:</label>
           <select
-            value={selectedBodyPart}
-            onChange={(e) => setSelectedBodyPart(e.target.value)}
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
             className="filter-select"
           >
-            {bodyParts.map(part => (
-              <option key={part.value} value={part.value}>
-                {part.label}
+            {categories.map(category => (
+              <option key={category.value} value={category.value}>
+                {category.label}
               </option>
             ))}
           </select>
@@ -730,98 +781,115 @@ const WorkoutSidebar = () => {
             onChange={(e) => setSelectedDifficulty(e.target.value)}
             className="filter-select"
           >
-            {difficulties.map(diff => (
-              <option key={diff.value} value={diff.value}>
-                {diff.label}
+            {difficulties.map(difficulty => (
+              <option key={difficulty.value} value={difficulty.value}>
+                {difficulty.label}
               </option>
             ))}
           </select>
         </div>
       </div>
 
-      <div className="workout-plans">
-        {Object.entries(filteredWorkouts).map(([key, category]) => (
-          <div key={key} className="workout-plan">
-            <h4 className="plan-title">{category.name}</h4>
-            <div className="exercises-list">
-              {category.workouts.map((workout, index) => (
-                <motion.div
-                  key={index}
-                  className="exercise-item"
-                  draggable
-                  onDragStart={(e) => handleWorkoutDrag(e, workout)}
-                  onMouseEnter={() => setHoveredWorkout(workout)}
-                  onMouseLeave={() => setHoveredWorkout(null)}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <div className="exercise-name">{workout.name}</div>
-                  <div className="exercise-category">{workout.category}</div>
-                  <div className="exercise-details">
-                    {workout.sets} sets × {workout.reps}
-                  </div>
-                  <div className="exercise-time">{workout.timeEstimate}</div>
-                  <div className="exercise-difficulty">{workout.difficulty}</div>
-                  <div className="exercise-equipment">{workout.equipment}</div>
-                </motion.div>
-              ))}
-            </div>
+      {/* Workouts List */}
+      <div className="workouts-list">
+        {filteredWorkouts.length === 0 ? (
+          <div className="no-results">
+            <p>No workouts found matching your criteria.</p>
+            <p>Try adjusting your search or filters.</p>
           </div>
-        ))}
-      </div>
-
-      {/* Exercise Info Tooltip */}
-      <AnimatePresence>
-        {hoveredWorkout && (
-          <motion.div
-            className="exercise-tooltip"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.2 }}
-          >
-            <h4>{hoveredWorkout.name}</h4>
-            <div className="tooltip-section">
-              <strong>Category:</strong>
-              <span>{hoveredWorkout.category}</span>
-            </div>
-            <div className="tooltip-section">
-              <strong>Body Parts:</strong>
-              <div className="body-part-tags">
-                {hoveredWorkout.bodyParts.map(part => (
-                  <span key={part} className="body-part-tag">{part}</span>
-                ))}
-              </div>
-            </div>
-            <div className="tooltip-section">
-              <strong>Difficulty:</strong>
-              <span>{hoveredWorkout.difficulty}</span>
-            </div>
-            <div className="tooltip-section">
-              <strong>Time:</strong>
-              <span>{hoveredWorkout.timeEstimate}</span>
-            </div>
-            <div className="tooltip-section">
-              <strong>Equipment:</strong>
-              <span>{workout.equipment}</span>
-            </div>
-            <div className="tooltip-section">
-              <strong>Description:</strong>
-              <p>{hoveredWorkout.description}</p>
-            </div>
-            <div className="tooltip-section">
-              <strong>Benefits:</strong>
-              <p>{hoveredWorkout.benefits}</p>
-            </div>
-            <div className="tooltip-section">
-              <strong>Video:</strong>
-              <a href={hoveredWorkout.youtubeUrl} target="_blank" rel="noopener noreferrer" className="video-link">
-                Watch Tutorial
-              </a>
-            </div>
-          </motion.div>
+        ) : (
+          filteredWorkouts.map((workoutName, index) => {
+            const workoutData = WorkoutSuggestionService.getWorkoutByName(workoutName);
+            const isSelected = selectedWorkout && selectedWorkout.name === workoutName;
+            
+            return (
+              <motion.div
+                key={index}
+                className={`workout-item ${isSelected ? 'selected' : ''}`}
+                draggable
+                onDragStart={(e) => handleWorkoutDrag(e, workoutName)}
+                onClick={() => handleWorkoutClick(workoutName)}
+                onMouseEnter={() => setHoveredWorkout(workoutName)}
+                onMouseLeave={() => setHoveredWorkout(null)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+              >
+                <div className="workout-header">
+                  <h4>{workoutName}</h4>
+                  {workoutData && (
+                    <span className="workout-time">{workoutData.estimatedTime}</span>
+                  )}
+                </div>
+                
+                {workoutData && (
+                  <div className="workout-details">
+                    <div className="workout-tags">
+                      <span className="difficulty-tag">{workoutData.difficulty}</span>
+                      <span className="category-tag">{workoutData.category}</span>
+                    </div>
+                    
+                    <div className="muscle-groups">
+                      {workoutData.muscleGroups.slice(0, 3).map((muscle, idx) => (
+                        <span key={idx} className="muscle-tag">{muscle}</span>
+                      ))}
+                    </div>
+                    
+                    {expandedWorkout === workoutName && (
+                      <motion.div
+                        className="workout-expanded"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                      >
+                        <div className="workout-info">
+                          <div className="benefits-section">
+                            <h5>Benefits:</h5>
+                            <ul>
+                              {workoutData.benefits.map((benefit, idx) => (
+                                <li key={idx}>{benefit}</li>
+                              ))}
+                            </ul>
+                          </div>
+                          
+                          <div className="instructions-section">
+                            <h5>Instructions:</h5>
+                            <ol>
+                              {workoutData.instructions.map((instruction, idx) => (
+                                <li key={idx}>{instruction}</li>
+                              ))}
+                            </ol>
+                          </div>
+                          
+                          {workoutData.tips && (
+                            <div className="tips-section">
+                              <h5>Tips:</h5>
+                              <p>{workoutData.tips}</p>
+                            </div>
+                          )}
+                          
+                          <div className="workout-meta">
+                            <div className="meta-item">
+                              <span className="meta-label">Calories:</span>
+                              <span className="meta-value">{workoutData.calories}</span>
+                            </div>
+                            <div className="meta-item">
+                              <span className="meta-label">Equipment:</span>
+                              <span className="meta-value">{workoutData.equipment.join(', ')}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </div>
+                )}
+              </motion.div>
+            );
+          })
         )}
-      </AnimatePresence>
+      </div>
 
       {/* Custom Workout Form */}
       <AnimatePresence>
@@ -841,16 +909,57 @@ const CustomWorkoutForm = ({ onSubmit, onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     category: '',
-    bodyParts: '',
     difficulty: '',
-    timeEstimate: '',
-    sets: '',
-    reps: '',
-    equipment: '',
-    description: '',
+    estimatedTime: '',
+    calories: '',
+    muscleGroups: '',
     benefits: '',
+    instructions: '',
+    tips: '',
+    equipment: '',
     youtubeUrl: ''
   });
+  const [isEstimating, setIsEstimating] = useState(false);
+
+  const handleWorkoutNameChange = async (workoutName) => {
+    setFormData(prev => ({ ...prev, name: workoutName }));
+    
+    if (workoutName.length > 2) {
+      setIsEstimating(true);
+      try {
+        const workout = WorkoutSuggestionService.estimateWorkoutFromName(workoutName);
+        if (workout) {
+          setFormData(prev => ({
+            ...prev,
+            name: workoutName,
+            category: workout.category,
+            difficulty: workout.difficulty,
+            estimatedTime: workout.estimatedTime,
+            calories: workout.calories,
+            muscleGroups: Array.isArray(workout.muscleGroups) 
+              ? workout.muscleGroups.join(', ') 
+              : workout.muscleGroups,
+            benefits: Array.isArray(workout.benefits) 
+              ? workout.benefits.join('\n') 
+              : workout.benefits,
+            instructions: Array.isArray(workout.instructions) 
+              ? workout.instructions.join('\n') 
+              : workout.instructions,
+            tips: workout.tips,
+            equipment: Array.isArray(workout.equipment) 
+              ? workout.equipment.join(', ') 
+              : workout.equipment,
+            youtubeUrl: workout.youtubeUrl
+          }));
+          toast.success('Workout estimated from name!');
+        }
+      } catch (error) {
+        toast.error('Could not estimate workout');
+      } finally {
+        setIsEstimating(false);
+      }
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -881,122 +990,31 @@ const CustomWorkoutForm = ({ onSubmit, onClose }) => {
             <input
               type="text"
               value={formData.name}
-              onChange={(e) => setFormData({...formData, name: e.target.value})}
-              placeholder="e.g., Custom Squat Variation"
+              onChange={(e) => handleWorkoutNameChange(e.target.value)}
+              placeholder="e.g., My Custom HIIT"
               required
             />
+            {isEstimating && (
+              <div className="ai-estimation-indicator">
+                <div className="ai-spinner"></div>
+                <span>Analyzing "{formData.name}"...</span>
+              </div>
+            )}
           </div>
           
-          <div className="form-group">
-            <label>Category</label>
-            <select
-              value={formData.category}
-              onChange={(e) => setFormData({...formData, category: e.target.value})}
-            >
-              <option value="">Select Category</option>
-              <option value="Strength Training">Strength Training</option>
-              <option value="Pilates">Pilates</option>
-              <option value="Yoga">Yoga</option>
-              <option value="HIIT">HIIT</option>
-              <option value="Cardio">Cardio</option>
-              <option value="Bodyweight">Bodyweight</option>
-            </select>
-          </div>
-          
-          <div className="form-group">
-            <label>Body Parts (comma separated)</label>
-            <input
-              type="text"
-              value={formData.bodyParts}
-              onChange={(e) => setFormData({...formData, bodyParts: e.target.value})}
-              placeholder="e.g., chest, triceps, shoulders"
-            />
-          </div>
-          
-          <div className="form-group">
-            <label>Difficulty</label>
-            <select
-              value={formData.difficulty}
-              onChange={(e) => setFormData({...formData, difficulty: e.target.value})}
-            >
-              <option value="">Select Difficulty</option>
-              <option value="beginner">Beginner</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="advanced">Advanced</option>
-            </select>
-          </div>
-          
-          <div className="form-group">
-            <label>Time Estimate</label>
-            <input
-              type="text"
-              value={formData.timeEstimate}
-              onChange={(e) => setFormData({...formData, timeEstimate: e.target.value})}
-              placeholder="e.g., 30 minutes"
-            />
-          </div>
-          
-          <div className="form-row">
-            <div className="form-group">
-              <label>Sets</label>
-              <input
-                type="text"
-                value={formData.sets}
-                onChange={(e) => setFormData({...formData, sets: e.target.value})}
-                placeholder="e.g., 3"
-              />
+          {/* AI Estimation Status */}
+          {formData.calories && (
+            <div className="ai-estimation-success">
+              <span>✓ Workout estimated</span>
+              <button 
+                type="button"
+                onClick={() => setFormData({ name: formData.name })}
+                className="clear-estimation-btn"
+              >
+                Clear & Start Over
+              </button>
             </div>
-            
-            <div className="form-group">
-              <label>Reps</label>
-              <input
-                type="text"
-                value={formData.reps}
-                onChange={(e) => setFormData({...formData, reps: e.target.value})}
-                placeholder="e.g., 8-12"
-              />
-            </div>
-          </div>
-          
-          <div className="form-group">
-            <label>Equipment</label>
-            <input
-              type="text"
-              value={formData.equipment}
-              onChange={(e) => setFormData({...formData, equipment: e.target.value})}
-              placeholder="e.g., Dumbbells, None"
-            />
-          </div>
-          
-          <div className="form-group">
-            <label>Description</label>
-            <textarea
-              value={formData.description}
-              onChange={(e) => setFormData({...formData, description: e.target.value})}
-              placeholder="Describe the exercise"
-              rows="3"
-            />
-          </div>
-          
-          <div className="form-group">
-            <label>Benefits</label>
-            <textarea
-              value={formData.benefits}
-              onChange={(e) => setFormData({...formData, benefits: e.target.value})}
-              placeholder="Describe the benefits"
-              rows="3"
-            />
-          </div>
-          
-          <div className="form-group">
-            <label>YouTube URL (optional)</label>
-            <input
-              type="url"
-              value={formData.youtubeUrl}
-              onChange={(e) => setFormData({...formData, youtubeUrl: e.target.value})}
-              placeholder="https://youtu.be/..."
-            />
-          </div>
+          )}
           
           <div className="form-actions">
             <button type="button" onClick={onClose} className="cancel-btn">
