@@ -45,6 +45,55 @@
   box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
 }
 
+/* Search Container */
+.search-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 40px 12px 12px;
+  border: 2px solid rgba(255, 140, 0, 0.2);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #333;
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: rgba(255, 140, 0, 0.5);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.1);
+}
+
+.search-input::placeholder {
+  color: rgba(102, 102, 102, 0.6);
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 4px;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.clear-search-btn:hover {
+  background: rgba(255, 140, 0, 0.1);
+  color: #333;
+}
+
 .workout-plans {
   display: flex;
   flex-direction: column;
@@ -106,11 +155,30 @@
   margin-bottom: 4px;
 }
 
+.exercise-category {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+  font-size: 0.7rem;
+  color: #ff8c00;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 .exercise-details {
   font-family: 'Manrope', sans-serif;
   font-weight: 400;
   font-size: 0.8rem;
   color: #666;
+  margin-bottom: 2px;
+}
+
+.exercise-equipment {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 400;
+  font-size: 0.7rem;
+  color: #999;
+  font-style: italic;
 }
 
 /* Exercise Tooltip */
@@ -144,6 +212,10 @@
   display: block;
   margin-bottom: 5px;
   color: #ff8c00;
+}
+
+.tooltip-section span {
+  color: #ccc;
 }
 
 .muscle-tags {
@@ -218,7 +290,8 @@
 }
 
 .form-group input,
-.form-group textarea {
+.form-group textarea,
+.form-group select {
   width: 100%;
   padding: 10px 12px;
   border: 2px solid rgba(255, 140, 0, 0.2);
@@ -231,7 +304,8 @@
 }
 
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
   outline: none;
   border-color: rgba(255, 140, 0, 0.5);
   background: rgba(255, 255, 255, 1);
@@ -299,8 +373,16 @@
     font-size: 0.8rem;
   }
   
+  .exercise-category {
+    font-size: 0.6rem;
+  }
+  
   .exercise-details {
     font-size: 0.7rem;
+  }
+  
+  .exercise-equipment {
+    font-size: 0.6rem;
   }
   
   .custom-form {
