@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Powerlifting Exercise Database</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .controls {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        select, input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 8px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            position: sticky;
+            top: 0;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .difficulty-beginner {
+            color: #2e7d32;
+        }
+        .difficulty-intermediate {
+            color: #f9a825;
+        }
+        .difficulty-advanced {
+            color: #c62828;
+        }
+    </style>
+</head>
+<body>
+    <h1>Powerlifting Exercise Database</h1>
+    
+    <div class="controls">
+        <div class="filter-group">
+            <label for="category-filter">Category:</label>
+            <select id="category-filter">
+                <option value="">All Categories</option>
+                <option value="Push">Push</ption>
+                <option value="Pull">Pull</option>
+                <option value="Legs">Legs</option>
+                <option value="Core & Stability">Core & Stability</option>
+                <option value="Mobility & Warm-Ups">Mobility & Warm-Ups</option>
+            </select>
+        </div>
+        
+        <div class="filter-group">
+            <label for="difficulty-filter">Difficulty:</label>
+            <select id="difficulty-filter">
+                <option value="">All Levels</option>
+                <option value="Beginner">Beginner</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Advanced">Advanced</option>
+            </select>
+        </div>
+        
+        <div class="filter-group">
+            <label for="search">Search:</label>
+            <input type="text" id="search" placeholder="Type exercise name...">
+        </div>
+        
+        <button id="reset-filters">Reset Filters</button>
+    </div>
+    
+    <table id="exercise-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Exercise Name</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Difficulty</th>
+                <th>Video</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Push -->
+            <tr>
+                <td>1</td>
+                <td>Band Face Pulls</td>
+                <td>Pull bands toward your face to strengthen rear shoulders</td>
+                <td>Push</td>
+                <td class="difficulty-beginner">Beginner</td>
+                <td><a href="https://youtu.be/pe9PVaFp3NI" target="_blank">Watch</a></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Scapular Push-Ups</td>
+                <td>Push up while only moving your shoulder blades</td>
+                <td>Push</td>
+                <td class="difficulty-beginner">Beginner</td>
+                <td><a href="https://youtu.be/k3YI6s2H5ZU" target="_blank">Watch</a></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Paused Floor Press</td>
+                <td>Press barbell from floor with 2-second pause</td>
+                <td>Push</td>
+                <td class="difficulty-intermediate">Intermediate</td>
+                <td><a href="https://youtu.be/Jj7voatxZ1Q" target="_blank">Watch</a></td>
+            </tr>
+            <!-- Continue with all 100 exercises... -->
+            <!-- Pull -->
+            <tr>
+                <td>11</td>
+                <td>Banded Pull-Aparts</td>
+                <td>Pull resistance band apart horizontally</td>
+                <td>Pull</td>
+                <td class="difficulty-beginner">Beginner</td>
+                <td><a href="https://youtu.be/bt5b9x9N0KU" target="_blank">Watch</a></td>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td>Dead Hang</td>
+                <td>Hang from bar for 30+ seconds</td>
+                <td>Pull</td>
+                <td class="difficulty-beginner">Beginner</td>
+                <td><a href="https://youtu.be/8Vt8z8WZf2E" target="_blank">Watch</a></td>
+            </tr>
+            <!-- Leg -->
+            <tr>
+                <td>21</td>
+                <td>Banded Side Steps</td>
+                <td>Step sideways with resistance band around knees</td>
+                <td>Leg</td>
+                <td class="difficulty-beginner">Beginner</td>
+                <td><a href="https://youtu.be/8bGXUvNk1k8" target="_blank">Watch</a></td>
+            </tr>
+            <tr>
+                <td>22</td>
+                <td>Tempo Goblet Squats</td>
+                <td>3-second descent squats holding kettlebell</td>
+                <td>Leg</td>
+                <td class="difficulty-beginner">Beginner</td>
+                <td><a href="https://youtu.be/MxsFDhcyCzQ" target="_blank">Watch</a></td>
+            </tr>
+            <!-- Core & Stability -->
+            <tr>
+                <td>61</td>
+                <td>Pallof Press</td>
+                <td>Anti-rotation cable hold</td>
+                <td>Core & Stability</td>
+                <td class="difficulty-beginner">Beginner</td>
+                <td><a href="https://youtu.be/4A3kKQqRjYk" target="_blank">Watch</a></td>
+            </tr>
+            <!-- Mobility & Warm-Ups -->
+            <tr>
+                <td>71</td>
+                <td>Banded Hip Distraction</td>
+                <td>Stretch with band around hip joint</td>
+                <td>Mobility & Warm-Ups</td>
+                <td class="difficulty-beginner">Beginner</td>
+                <td><a href="https://youtu.be/4A3kKQqRjYk" target="_blank">Watch</a></td>
+            </tr>
+            <!-- Continue with remaining exercises up to 100 -->
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryFilter = document.getElementById('category-filter');
+            const difficultyFilter = document.getElementById('difficulty-filter');
+            const searchInput = document.getElementById('search');
+            const resetButton = document.getElementById('reset-filters');
+            const tableRows = document.querySelectorAll('#exercise-table tbody tr');
+            
+            function filterExercises() {
+                const categoryValue = categoryFilter.value.toLowerCase();
+                const difficultyValue = difficultyFilter.value.toLowerCase();
+                const searchValue = searchInput.value.toLowerCase();
+                
+                tableRows.forEach(row => {
+                    const category = row.cells[3].textContent.toLowerCase();
+                    const difficulty = row.cells[4].textContent.toLowerCase();
+                    const exerciseName = row.cells[1].textContent.toLowerCase();
+                    const description = row.cells[2].textContent.toLowerCase();
+                    
+                    const categoryMatch = categoryValue === '' || category.includes(categoryValue);
+                    const difficultyMatch = difficultyValue === '' || difficulty.includes(difficultyValue);
+                    const searchMatch = searchValue === '' || 
+                        exerciseName.includes(searchValue) || 
+                        description.includes(searchValue);
+                    
+                    if (categoryMatch && difficultyMatch && searchMatch) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+            
+            categoryFilter.addEventListener('change', filterExercises);
+            difficultyFilter.addEventListener('change', filterExercises);
+            searchInput.addEventListener('input', filterExercises);
+            
+            resetButton.addEventListener('click', function() {
+                categoryFilter.value = '';
+                difficultyFilter.value = '';
+                searchInput.value = '';
+                filterExercises();
+            });
+        });
+    </script>
+</body>
+</html>
