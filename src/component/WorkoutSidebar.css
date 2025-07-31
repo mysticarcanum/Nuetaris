@@ -48,7 +48,7 @@
 /* Search Container */
 .search-container {
   position: relative;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .search-input {
@@ -87,11 +87,53 @@
   padding: 4px;
   border-radius: 50%;
   transition: all 0.3s ease;
+  font-weight: 600;
 }
 
 .clear-search-btn:hover {
   background: rgba(255, 140, 0, 0.1);
   color: #333;
+}
+
+/* Filter Controls */
+.filter-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  flex: 1;
+  min-width: 120px;
+}
+
+.filter-group label {
+  display: block;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.filter-select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 2px solid rgba(255, 140, 0, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #333;
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: rgba(255, 140, 0, 0.5);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.1);
 }
 
 .workout-plans {
@@ -130,7 +172,7 @@
   background: rgba(255, 255, 255, 0.8);
   border: 1px solid rgba(255, 140, 0, 0.2);
   border-radius: 8px;
-  padding: 10px;
+  padding: 12px;
   cursor: grab;
   transition: all 0.3s ease;
   position: relative;
@@ -149,7 +191,7 @@
 
 .exercise-name {
   font-family: 'Manrope', sans-serif;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.9rem;
   color: #333;
   margin-bottom: 4px;
@@ -173,6 +215,23 @@
   margin-bottom: 2px;
 }
 
+.exercise-time {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: 0.7rem;
+  color: #27ae60;
+  margin-bottom: 2px;
+}
+
+.exercise-difficulty {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+  font-size: 0.7rem;
+  color: #9b59b6;
+  margin-bottom: 2px;
+  text-transform: capitalize;
+}
+
 .exercise-equipment {
   font-family: 'Manrope', sans-serif;
   font-weight: 400;
@@ -184,60 +243,79 @@
 /* Exercise Tooltip */
 .exercise-tooltip {
   position: fixed;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.95);
   color: white;
-  padding: 15px;
+  padding: 20px;
   border-radius: 12px;
   font-family: 'Manrope', sans-serif;
   font-size: 0.9rem;
-  max-width: 300px;
+  max-width: 350px;
   z-index: 1000;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .exercise-tooltip h4 {
   font-weight: 700;
-  font-size: 1rem;
-  margin-bottom: 10px;
+  font-size: 1.1rem;
+  margin-bottom: 15px;
   color: #ff8c00;
 }
 
 .tooltip-section {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .tooltip-section strong {
   display: block;
   margin-bottom: 5px;
   color: #ff8c00;
+  font-weight: 600;
 }
 
 .tooltip-section span {
   color: #ccc;
 }
 
-.muscle-tags {
+.tooltip-section p {
+  margin: 0;
+  line-height: 1.5;
+  color: #ccc;
+}
+
+.body-part-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
   margin-top: 5px;
 }
 
-.muscle-tag {
+.body-part-tag {
   background: rgba(255, 140, 0, 0.2);
   color: #ff8c00;
-  padding: 2px 6px;
+  padding: 3px 8px;
   border-radius: 4px;
   font-size: 0.7rem;
   font-weight: 600;
+  text-transform: capitalize;
 }
 
-.tooltip-section p {
-  margin: 0;
-  line-height: 1.4;
-  color: #ccc;
+.video-link {
+  display: inline-block;
+  background: linear-gradient(45deg, #ff8c00, #ff6b35);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.video-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
 }
 
 /* Custom Form Styles */
@@ -261,8 +339,10 @@
   backdrop-filter: blur(20px);
   border-radius: 20px;
   padding: 30px;
-  max-width: 400px;
+  max-width: 500px;
   width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
@@ -359,14 +439,69 @@
   box-shadow: 0 6px 16px rgba(255, 140, 0, 0.4);
 }
 
+/* Difficulty level indicators */
+.exercise-item[data-difficulty="beginner"] {
+  border-left: 4px solid #27ae60;
+}
+
+.exercise-item[data-difficulty="intermediate"] {
+  border-left: 4px solid #f39c12;
+}
+
+.exercise-item[data-difficulty="advanced"] {
+  border-left: 4px solid #e74c3c;
+}
+
+/* Category-specific styling */
+.exercise-item[data-category="Push"] .exercise-category {
+  color: #e74c3c;
+}
+
+.exercise-item[data-category="Pull"] .exercise-category {
+  color: #3498db;
+}
+
+.exercise-item[data-category="Legs"] .exercise-category {
+  color: #27ae60;
+}
+
+.exercise-item[data-category="Pilates"] .exercise-category {
+  color: #9b59b6;
+}
+
+.exercise-item[data-category="Yoga"] .exercise-category {
+  color: #f39c12;
+}
+
+.exercise-item[data-category="HIIT"] .exercise-category {
+  color: #e67e22;
+}
+
+.exercise-item[data-category="Cardio"] .exercise-category {
+  color: #1abc9c;
+}
+
+.exercise-item[data-category="Bodyweight"] .exercise-category {
+  color: #34495e;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .workout-sidebar {
     padding: 15px;
   }
   
+  .filter-controls {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .filter-group {
+    min-width: auto;
+  }
+  
   .exercise-item {
-    padding: 8px;
+    padding: 10px;
   }
   
   .exercise-name {
@@ -381,6 +516,14 @@
     font-size: 0.7rem;
   }
   
+  .exercise-time {
+    font-size: 0.6rem;
+  }
+  
+  .exercise-difficulty {
+    font-size: 0.6rem;
+  }
+  
   .exercise-equipment {
     font-size: 0.6rem;
   }
@@ -393,6 +536,21 @@
   .form-row {
     grid-template-columns: 1fr;
   }
+  
+  .exercise-tooltip {
+    max-width: 280px;
+    font-size: 0.8rem;
+    padding: 15px;
+  }
+  
+  .body-part-tags {
+    gap: 3px;
+  }
+  
+  .body-part-tag {
+    font-size: 0.6rem;
+    padding: 2px 6px;
+  }
 }
 
 /* Touch-friendly interactions */
@@ -404,5 +562,155 @@
   .exercise-item:active {
     background: rgba(255, 140, 0, 0.1);
     transform: scale(0.98);
+  }
+  
+  .exercise-tooltip {
+    max-width: 300px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Scrollbar styling for workout sidebar */
+.workout-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.workout-sidebar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.workout-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 140, 0, 0.3);
+  border-radius: 3px;
+}
+
+.workout-sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 140, 0, 0.5);
+}
+
+/* Animation for workout items */
+.exercise-item {
+  animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading state for search */
+.search-container.loading::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 140, 0, 0.3);
+  border-top: 2px solid #ff8c00;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: translateY(-50%) rotate(0deg); }
+  100% { transform: translateY(-50%) rotate(360deg); }
+}
+
+/* Empty state styling */
+.exercises-list:empty::after {
+  content: 'No workouts found';
+  display: block;
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-family: 'Manrope', sans-serif;
+  font-style: italic;
+}
+
+/* Category collapse/expand functionality */
+.workout-plan.collapsed .exercises-list {
+  display: none;
+}
+
+.plan-title {
+  cursor: pointer;
+  user-select: none;
+}
+
+.plan-title::after {
+  content: '▼';
+  margin-left: 8px;
+  font-size: 0.8rem;
+  transition: transform 0.3s ease;
+}
+
+.workout-plan.collapsed .plan-title::after {
+  transform: rotate(-90deg);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .exercise-item {
+    border-width: 2px;
+  }
+  
+  .exercise-tooltip {
+    border-width: 2px;
+  }
+  
+  .search-input {
+    border-width: 2px;
+  }
+  
+  .filter-select {
+    border-width: 2px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .exercise-item,
+  .exercise-tooltip,
+  .custom-form {
+    animation: none;
+    transition: none;
+  }
+  
+  .exercise-item:hover {
+    transform: none;
+  }
+}
+
+/* Focus styles for accessibility */
+.exercise-item:focus,
+.search-input:focus,
+.filter-select:focus {
+  outline: 2px solid rgba(255, 140, 0, 0.5);
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+  .workout-sidebar {
+    background: white;
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+  
+  .exercise-tooltip {
+    display: none;
+  }
+  
+  .custom-form-overlay {
+    display: none;
   }
 }
