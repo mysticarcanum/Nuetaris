@@ -1,5 +1,13 @@
-/ src/services/fastNutrition.js
-import nutritionDatabase from '../data/nutritionDatabase.json';
+// src/services/fastNutrition.js
+// Support both Node.js and browser environments
+let nutritionDatabase;
+try {
+  // Try ES module import first (for browser)
+  nutritionDatabase = require('../data/nutritionDatabase.json');
+} catch (error) {
+  // Fallback for browser environment - we'll load it dynamically
+  nutritionDatabase = [];
+}
 
 class FastNutritionService {
   static nutritionCache = new Map();
@@ -30,6 +38,11 @@ class FastNutritionService {
   
   static fuzzySearch(mealName) {
     const searchTerm = mealName.toLowerCase();
+    
+    // If database is not loaded, return null
+    if (!nutritionDatabase || nutritionDatabase.length === 0) {
+      return null;
+    }
     
     // Exact match first
     const exactMatch = nutritionDatabase.find(meal => 
@@ -301,6 +314,10 @@ class FastNutritionService {
       return this.searchCache.get(cacheKey);
     }
     
+    if (!nutritionDatabase || nutritionDatabase.length === 0) {
+      return [];
+    }
+    
     const suggestions = nutritionDatabase
       .filter(meal => 
         meal.name.toLowerCase().includes(searchTerm) ||
@@ -323,15 +340,23 @@ class FastNutritionService {
   
   // Get all available meals
   static getAllMeals() {
-    return nutritionDatabase.map(meal => meal.name);
+    return nutritionDatabase ? nutritionDatabase.map(meal => meal.name) : [];
   }
   
   // Get meals by category
   static getMealsByCategory(category) {
     return nutritionDatabase
-      .filter(meal => meal.category === category)
-      .map(meal => meal.name);
+      ? nutritionDatabase
+          .filter(meal => meal.category === category)
+          .map(meal => meal.name)
+      : [];
   }
 }
 
-export default FastNutritionService;
+// Support both CommonJS and ES modules
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = FastNutritionService;
+} else {
+  // Browser environment
+  window.FastNutritionService = FastNutritionService;
+}
