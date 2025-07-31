@@ -11,18 +11,6 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
-    assetsDir: 'assets',
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          gsap: ['gsap'],
-          framer: ['framer-motion']
-        }
-      }
-    }
-  },
-  optimizeDeps: {
-    include: ['react', 'react-dom', 'gsap', 'framer-motion']
+    assetsDir: 'assets'
   }
 })
