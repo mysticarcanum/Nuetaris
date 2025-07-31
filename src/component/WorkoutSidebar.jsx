@@ -7,176 +7,209 @@ const WorkoutSidebar = () => {
   const [showCustomForm, setShowCustomForm] = useState(false);
   const [hoveredWorkout, setHoveredWorkout] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedBodyPart, setSelectedBodyPart] = useState('all');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
 
-  // Comprehensive workout database
+  // Body part filter options
+  const bodyParts = [
+    { value: 'all', label: 'All Body Parts' },
+    { value: 'chest', label: 'Chest' },
+    { value: 'back', label: 'Back' },
+    { value: 'shoulders', label: 'Shoulders' },
+    { value: 'arms', label: 'Arms' },
+    { value: 'core', label: 'Core' },
+    { value: 'legs', label: 'Legs' },
+    { value: 'glutes', label: 'Glutes' },
+    { value: 'cardio', label: 'Cardio' },
+    { value: 'full_body', label: 'Full Body' }
+  ];
+
+  // Difficulty levels
+  const difficulties = [
+    { value: 'all', label: 'All Levels' },
+    { value: 'beginner', label: 'Beginner' },
+    { value: 'intermediate', label: 'Intermediate' },
+    { value: 'advanced', label: 'Advanced' }
+  ];
+
+  // Comprehensive workout database with realistic options
   const workoutCategories = {
     strength_training: {
       name: "Strength Training",
       workouts: [
-        // Push Day
+        // Chest Exercises
         {
           name: "Bench Press",
           category: "Push",
-          muscleGroups: ["Chest", "Triceps", "Anterior Deltoids"],
-          benefits: "Builds chest strength and size, improves pressing power",
+          bodyParts: ["chest", "triceps", "shoulders"],
+          difficulty: "intermediate",
+          timeEstimate: "45 minutes",
           sets: "3-4",
           reps: "8-12",
-          equipment: "Barbell, Bench"
-        },
-        {
-          name: "Overhead Press",
-          category: "Push",
-          muscleGroups: ["Shoulders", "Triceps"],
-          benefits: "Develops shoulder strength and stability",
-          sets: "3-4",
-          reps: "8-12",
-          equipment: "Barbell"
+          equipment: "Barbell, Bench",
+          description: "Compound movement for chest development and pressing strength",
+          youtubeUrl: "https://youtu.be/rT7DgCr-3pg",
+          benefits: "Builds chest strength and size, improves pressing power, develops triceps"
         },
         {
           name: "Incline Dumbbell Press",
           category: "Push",
-          muscleGroups: ["Upper Chest", "Triceps"],
-          benefits: "Targets upper chest development",
+          bodyParts: ["chest", "triceps", "shoulders"],
+          difficulty: "intermediate",
+          timeEstimate: "40 minutes",
           sets: "3",
           reps: "10-12",
-          equipment: "Dumbbells, Bench"
+          equipment: "Dumbbells, Bench",
+          description: "Targets upper chest development with dumbbell variation",
+          youtubeUrl: "https://youtu.be/8iNEnVn-8Qc",
+          benefits: "Upper chest focus, shoulder stability, unilateral strength"
         },
         {
-          name: "Dips",
+          name: "Decline Push-ups",
           category: "Push",
-          muscleGroups: ["Chest", "Triceps", "Shoulders"],
-          benefits: "Compound movement for upper body strength",
+          bodyParts: ["chest", "triceps", "shoulders"],
+          difficulty: "beginner",
+          timeEstimate: "20 minutes",
           sets: "3",
-          reps: "8-12",
-          equipment: "Dip Bars"
+          reps: "10-15",
+          equipment: "None",
+          description: "Bodyweight exercise targeting lower chest",
+          youtubeUrl: "https://youtu.be/0PkyZ7ejg-o",
+          benefits: "No equipment needed, chest development, core engagement"
         },
-        {
-          name: "Lateral Raises",
-          category: "Push",
-          muscleGroups: ["Lateral Deltoids"],
-          benefits: "Isolates lateral deltoids for shoulder width",
-          sets: "3",
-          reps: "12-15",
-          equipment: "Dumbbells"
-        },
-        {
-          name: "Tricep Extensions",
-          category: "Push",
-          muscleGroups: ["Triceps"],
-          benefits: "Isolates tricep development",
-          sets: "3",
-          reps: "12-15",
-          equipment: "Cable Machine"
-        },
-        // Pull Day
-        {
-          name: "Deadlifts",
-          category: "Pull",
-          muscleGroups: ["Back", "Hamstrings", "Glutes", "Core"],
-          benefits: "Full body compound movement, builds overall strength",
-          sets: "3-4",
-          reps: "6-8",
-          equipment: "Barbell"
-        },
+        // Back Exercises
         {
           name: "Pull-ups",
           category: "Pull",
-          muscleGroups: ["Lats", "Biceps", "Upper Back"],
-          benefits: "Develops back width and pulling strength",
+          bodyParts: ["back", "biceps", "shoulders"],
+          difficulty: "intermediate",
+          timeEstimate: "30 minutes",
           sets: "3",
           reps: "8-12",
-          equipment: "Pull-up Bar"
+          equipment: "Pull-up Bar",
+          description: "Compound back exercise for width and pulling strength",
+          youtubeUrl: "https://youtu.be/eGo4IYlbE5g",
+          benefits: "Back width, grip strength, bodyweight exercise"
         },
         {
           name: "Barbell Rows",
           category: "Pull",
-          muscleGroups: ["Middle Back", "Biceps"],
-          benefits: "Thickens middle back and improves posture",
+          bodyParts: ["back", "biceps"],
+          difficulty: "intermediate",
+          timeEstimate: "35 minutes",
           sets: "3-4",
           reps: "8-12",
-          equipment: "Barbell"
+          equipment: "Barbell",
+          description: "Thickens middle back and improves posture",
+          youtubeUrl: "https://youtu.be/9efgcAjQe7E",
+          benefits: "Back thickness, posture improvement, compound movement"
         },
         {
           name: "Lat Pulldowns",
           category: "Pull",
-          muscleGroups: ["Lats", "Biceps"],
-          benefits: "Alternative to pull-ups, targets lat width",
+          bodyParts: ["back", "biceps"],
+          difficulty: "beginner",
+          timeEstimate: "25 minutes",
           sets: "3",
           reps: "10-12",
-          equipment: "Cable Machine"
+          equipment: "Cable Machine",
+          description: "Machine-based lat development exercise",
+          youtubeUrl: "https://youtu.be/CAwf7n6Luuc",
+          benefits: "Lat width, beginner friendly, controlled movement"
+        },
+        // Shoulder Exercises
+        {
+          name: "Overhead Press",
+          category: "Push",
+          bodyParts: ["shoulders", "triceps"],
+          difficulty: "intermediate",
+          timeEstimate: "30 minutes",
+          sets: "3-4",
+          reps: "8-12",
+          equipment: "Barbell",
+          description: "Develops shoulder strength and stability",
+          youtubeUrl: "https://youtu.be/2yjwXTZQDDg",
+          benefits: "Shoulder strength, core stability, pressing power"
         },
         {
-          name: "Face Pulls",
-          category: "Pull",
-          muscleGroups: ["Rear Deltoids", "Upper Back"],
-          benefits: "Improves shoulder health and posture",
+          name: "Lateral Raises",
+          category: "Push",
+          bodyParts: ["shoulders"],
+          difficulty: "beginner",
+          timeEstimate: "20 minutes",
           sets: "3",
           reps: "12-15",
-          equipment: "Cable Machine"
+          equipment: "Dumbbells",
+          description: "Isolates lateral deltoids for shoulder width",
+          youtubeUrl: "https://youtu.be/3VcKaXpzqRo",
+          benefits: "Shoulder width, isolation exercise, light weight"
         },
+        // Arm Exercises
         {
           name: "Bicep Curls",
           category: "Pull",
-          muscleGroups: ["Biceps"],
-          benefits: "Isolates bicep development",
+          bodyParts: ["arms"],
+          difficulty: "beginner",
+          timeEstimate: "20 minutes",
           sets: "3",
           reps: "12-15",
-          equipment: "Dumbbells"
+          equipment: "Dumbbells",
+          description: "Classic bicep isolation exercise",
+          youtubeUrl: "https://youtu.be/ykJmrZ5v0Oa",
+          benefits: "Bicep development, simple movement, beginner friendly"
         },
-        // Legs Day
+        {
+          name: "Tricep Dips",
+          category: "Push",
+          bodyParts: ["arms", "chest"],
+          difficulty: "intermediate",
+          timeEstimate: "25 minutes",
+          sets: "3",
+          reps: "8-12",
+          equipment: "Dip Bars",
+          description: "Compound movement for tricep development",
+          youtubeUrl: "https://youtu.be/2z8JmcrW-As",
+          benefits: "Tricep strength, chest involvement, bodyweight"
+        },
+        // Leg Exercises
         {
           name: "Squats",
           category: "Legs",
-          muscleGroups: ["Quadriceps", "Glutes", "Core"],
-          benefits: "King of leg exercises, builds overall leg strength",
+          bodyParts: ["legs", "glutes", "core"],
+          difficulty: "intermediate",
+          timeEstimate: "45 minutes",
           sets: "3-4",
           reps: "8-12",
-          equipment: "Barbell"
+          equipment: "Barbell",
+          description: "King of leg exercises, builds overall leg strength",
+          youtubeUrl: "https://youtu.be/YaXPRqUwItQ",
+          benefits: "Full leg development, core strength, compound movement"
         },
         {
           name: "Romanian Deadlifts",
           category: "Legs",
-          muscleGroups: ["Hamstrings", "Glutes", "Lower Back"],
-          benefits: "Targets hamstrings and improves hip hinge",
+          bodyParts: ["legs", "glutes", "back"],
+          difficulty: "intermediate",
+          timeEstimate: "40 minutes",
           sets: "3-4",
           reps: "8-12",
-          equipment: "Barbell"
+          equipment: "Barbell",
+          description: "Targets hamstrings and improves hip hinge",
+          youtubeUrl: "https://youtu.be/1ED-obD0G0Y",
+          benefits: "Hamstring development, hip mobility, posterior chain"
         },
         {
           name: "Leg Press",
           category: "Legs",
-          muscleGroups: ["Quadriceps", "Glutes"],
-          benefits: "Machine-based quad development",
+          bodyParts: ["legs", "glutes"],
+          difficulty: "beginner",
+          timeEstimate: "30 minutes",
           sets: "3",
           reps: "10-12",
-          equipment: "Leg Press Machine"
-        },
-        {
-          name: "Leg Extensions",
-          category: "Legs",
-          muscleGroups: ["Quadriceps"],
-          benefits: "Isolates quadriceps development",
-          sets: "3",
-          reps: "12-15",
-          equipment: "Leg Extension Machine"
-        },
-        {
-          name: "Leg Curls",
-          category: "Legs",
-          muscleGroups: ["Hamstrings"],
-          benefits: "Isolates hamstring development",
-          sets: "3",
-          reps: "12-15",
-          equipment: "Leg Curl Machine"
-        },
-        {
-          name: "Calf Raises",
-          category: "Legs",
-          muscleGroups: ["Calves"],
-          benefits: "Develops calf strength and size",
-          sets: "4",
-          reps: "15-20",
-          equipment: "Calf Raise Machine"
+          equipment: "Leg Press Machine",
+          description: "Machine-based quad development",
+          youtubeUrl: "https://youtu.be/IZxyjW7MP2Q",
+          benefits: "Quad development, beginner friendly, controlled movement"
         }
       ]
     },
@@ -184,94 +217,139 @@ const WorkoutSidebar = () => {
       name: "Pilates",
       workouts: [
         {
-          name: "Hundred",
+          name: "Pilates Mat Workout",
           category: "Pilates",
-          muscleGroups: ["Core", "Shoulders"],
-          benefits: "Improves breathing, core strength, and circulation",
+          bodyParts: ["core", "full_body"],
+          difficulty: "beginner",
+          timeEstimate: "45 minutes",
           sets: "1",
-          reps: "100 breaths",
-          equipment: "Mat"
+          reps: "Full routine",
+          equipment: "Mat",
+          description: "Complete Pilates mat workout for core strength and flexibility",
+          youtubeUrl: "https://youtu.be/0krBwqXgGtY",
+          benefits: "Core strength, flexibility, mind-body connection, posture"
         },
         {
-          name: "Roll Up",
+          name: "Pilates for Beginners",
           category: "Pilates",
-          muscleGroups: ["Core", "Spine"],
-          benefits: "Spinal articulation and core control",
-          sets: "3",
-          reps: "6-8",
-          equipment: "Mat"
+          bodyParts: ["core", "full_body"],
+          difficulty: "beginner",
+          timeEstimate: "30 minutes",
+          sets: "1",
+          reps: "Full routine",
+          equipment: "Mat",
+          description: "Gentle introduction to Pilates fundamentals",
+          youtubeUrl: "https://youtu.be/0krBwqXgGtY",
+          benefits: "Core activation, breathing, basic movements"
         },
         {
-          name: "Single Leg Stretch",
+          name: "Advanced Pilates",
           category: "Pilates",
-          muscleGroups: ["Core", "Hip Flexors"],
-          benefits: "Core stability and hip mobility",
-          sets: "3",
-          reps: "8-10 each side",
-          equipment: "Mat"
+          bodyParts: ["core", "full_body"],
+          difficulty: "advanced",
+          timeEstimate: "60 minutes",
+          sets: "1",
+          reps: "Full routine",
+          equipment: "Mat",
+          description: "Challenging Pilates workout for experienced practitioners",
+          youtubeUrl: "https://youtu.be/0krBwqXgGtY",
+          benefits: "Advanced core control, strength, flexibility"
+        }
+      ]
+    },
+    yoga: {
+      name: "Yoga",
+      workouts: [
+        {
+          name: "15 Minute Meditation",
+          category: "Yoga",
+          bodyParts: ["mind", "core"],
+          difficulty: "beginner",
+          timeEstimate: "15 minutes",
+          sets: "1",
+          reps: "Guided session",
+          equipment: "Mat",
+          description: "Short meditation session for mindfulness and stress relief",
+          youtubeUrl: "https://youtu.be/inpok4MKVLM",
+          benefits: "Stress reduction, mental clarity, mindfulness"
         },
         {
-          name: "Double Leg Stretch",
-          category: "Pilates",
-          muscleGroups: ["Core", "Shoulders"],
-          benefits: "Full body coordination and control",
-          sets: "3",
-          reps: "8-10",
-          equipment: "Mat"
+          name: "30 Minute Meditation",
+          category: "Yoga",
+          bodyParts: ["mind", "core"],
+          difficulty: "intermediate",
+          timeEstimate: "30 minutes",
+          sets: "1",
+          reps: "Guided session",
+          equipment: "Mat",
+          description: "Extended meditation for deeper relaxation",
+          youtubeUrl: "https://youtu.be/inpok4MKVLM",
+          benefits: "Deep relaxation, mental focus, stress management"
         },
         {
-          name: "Scissors",
-          category: "Pilates",
-          muscleGroups: ["Core", "Hip Flexors"],
-          benefits: "Core strength and hip flexibility",
-          sets: "3",
-          reps: "8-10 each side",
-          equipment: "Mat"
+          name: "45 Minute Meditation",
+          category: "Yoga",
+          bodyParts: ["mind", "core"],
+          difficulty: "intermediate",
+          timeEstimate: "45 minutes",
+          sets: "1",
+          reps: "Guided session",
+          equipment: "Mat",
+          description: "Longer meditation session for experienced practitioners",
+          youtubeUrl: "https://youtu.be/inpok4MKVLM",
+          benefits: "Deep mental clarity, extended relaxation"
         },
         {
-          name: "Teaser",
-          category: "Pilates",
-          muscleGroups: ["Core", "Hip Flexors"],
-          benefits: "Advanced core control and balance",
-          sets: "3",
-          reps: "5-8",
-          equipment: "Mat"
+          name: "1 Hour Meditation",
+          category: "Yoga",
+          bodyParts: ["mind", "core"],
+          difficulty: "advanced",
+          timeEstimate: "60 minutes",
+          sets: "1",
+          reps: "Guided session",
+          equipment: "Mat",
+          description: "Extended meditation for advanced practitioners",
+          youtubeUrl: "https://youtu.be/inpok4MKVLM",
+          benefits: "Deep mental state, advanced mindfulness"
         },
         {
-          name: "Swan Dive",
-          category: "Pilates",
-          muscleGroups: ["Back", "Shoulders"],
-          benefits: "Back extension and shoulder mobility",
-          sets: "3",
-          reps: "6-8",
-          equipment: "Mat"
+          name: "Vinyasa Flow",
+          category: "Yoga",
+          bodyParts: ["full_body", "core"],
+          difficulty: "intermediate",
+          timeEstimate: "45 minutes",
+          sets: "1",
+          reps: "Full flow",
+          equipment: "Mat",
+          description: "Dynamic yoga flow connecting breath with movement",
+          youtubeUrl: "https://youtu.be/9WzX7ODGI84",
+          benefits: "Flexibility, strength, breath control, flow"
         },
         {
-          name: "Side Kick Series",
-          category: "Pilates",
-          muscleGroups: ["Hip Abductors", "Core"],
-          benefits: "Hip strength and lateral movement",
-          sets: "3",
-          reps: "8-10 each side",
-          equipment: "Mat"
+          name: "Hatha Yoga",
+          category: "Yoga",
+          bodyParts: ["full_body", "core"],
+          difficulty: "beginner",
+          timeEstimate: "30 minutes",
+          sets: "1",
+          reps: "Full session",
+          equipment: "Mat",
+          description: "Gentle yoga focusing on basic poses and breathing",
+          youtubeUrl: "https://youtu.be/9WzX7ODGI84",
+          benefits: "Flexibility, relaxation, basic poses, breathing"
         },
         {
-          name: "Spine Twist",
-          category: "Pilates",
-          muscleGroups: ["Core", "Spine"],
-          benefits: "Spinal rotation and core control",
-          sets: "3",
-          reps: "6-8 each side",
-          equipment: "Mat"
-        },
-        {
-          name: "Leg Pull Front",
-          category: "Pilates",
-          muscleGroups: ["Core", "Shoulders"],
-          benefits: "Plank progression and core stability",
-          sets: "3",
-          reps: "6-8",
-          equipment: "Mat"
+          name: "Power Yoga",
+          category: "Yoga",
+          bodyParts: ["full_body", "core"],
+          difficulty: "advanced",
+          timeEstimate: "60 minutes",
+          sets: "1",
+          reps: "Full session",
+          equipment: "Mat",
+          description: "Intense yoga workout combining strength and flexibility",
+          youtubeUrl: "https://youtu.be/9WzX7ODGI84",
+          benefits: "Strength, flexibility, endurance, mental focus"
         }
       ]
     },
@@ -279,130 +357,134 @@ const WorkoutSidebar = () => {
       name: "HIIT & Cardio",
       workouts: [
         {
-          name: "Burpees",
+          name: "15 Minute HIIT",
           category: "HIIT",
-          muscleGroups: ["Full Body", "Cardio"],
-          benefits: "High intensity full body exercise",
-          sets: "4",
-          reps: "30 seconds",
-          equipment: "None"
+          bodyParts: ["full_body", "cardio"],
+          difficulty: "beginner",
+          timeEstimate: "15 minutes",
+          sets: "1",
+          reps: "Full session",
+          equipment: "None",
+          description: "High intensity interval training for quick cardio",
+          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
+          benefits: "Quick cardio, fat burning, time efficient"
         },
         {
-          name: "Mountain Climbers",
+          name: "30 Minute HIIT",
           category: "HIIT",
-          muscleGroups: ["Core", "Cardio"],
-          benefits: "Dynamic core exercise with cardio",
-          sets: "4",
-          reps: "30 seconds",
-          equipment: "None"
+          bodyParts: ["full_body", "cardio"],
+          difficulty: "intermediate",
+          timeEstimate: "30 minutes",
+          sets: "1",
+          reps: "Full session",
+          equipment: "None",
+          description: "Extended high intensity interval training",
+          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
+          benefits: "Cardio endurance, fat burning, strength"
         },
         {
-          name: "Jump Squats",
+          name: "45 Minute HIIT",
           category: "HIIT",
-          muscleGroups: ["Legs", "Cardio"],
-          benefits: "Explosive leg power and cardio",
-          sets: "4",
-          reps: "30 seconds",
-          equipment: "None"
-        },
-        {
-          name: "High Knees",
-          category: "HIIT",
-          muscleGroups: ["Cardio", "Core"],
-          benefits: "High intensity cardio exercise",
-          sets: "4",
-          reps: "30 seconds",
-          equipment: "None"
-        },
-        {
-          name: "Jumping Jacks",
-          category: "HIIT",
-          muscleGroups: ["Cardio", "Full Body"],
-          benefits: "Classic cardio exercise",
-          sets: "4",
-          reps: "30 seconds",
-          equipment: "None"
-        },
-        {
-          name: "Plank Jacks",
-          category: "HIIT",
-          muscleGroups: ["Core", "Cardio"],
-          benefits: "Core stability with cardio",
-          sets: "4",
-          reps: "30 seconds",
-          equipment: "None"
-        },
-        {
-          name: "Sprint Intervals",
-          category: "Cardio",
-          muscleGroups: ["Cardio", "Legs"],
-          benefits: "High intensity sprint training",
-          sets: "8",
-          reps: "30 seconds sprint, 90 seconds rest",
-          equipment: "Treadmill/Track"
+          bodyParts: ["full_body", "cardio"],
+          difficulty: "advanced",
+          timeEstimate: "45 minutes",
+          sets: "1",
+          reps: "Full session",
+          equipment: "None",
+          description: "Longer high intensity interval training session",
+          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
+          benefits: "Extended cardio, endurance, strength"
         },
         {
           name: "15 Minute Run",
           category: "Cardio",
-          muscleGroups: ["Cardio", "Legs"],
-          benefits: "Steady state cardio endurance",
+          bodyParts: ["legs", "cardio"],
+          difficulty: "beginner",
+          timeEstimate: "15 minutes",
           sets: "1",
-          reps: "15 minutes",
-          equipment: "Treadmill/Track"
+          reps: "Steady pace",
+          equipment: "Treadmill/Track",
+          description: "Steady state cardio endurance",
+          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
+          benefits: "Cardio fitness, leg strength, endurance"
         },
         {
           name: "30 Minute Run",
           category: "Cardio",
-          muscleGroups: ["Cardio", "Legs"],
-          benefits: "Extended cardio endurance",
+          bodyParts: ["legs", "cardio"],
+          difficulty: "intermediate",
+          timeEstimate: "30 minutes",
           sets: "1",
-          reps: "30 minutes",
-          equipment: "Treadmill/Track"
+          reps: "Steady pace",
+          equipment: "Treadmill/Track",
+          description: "Extended cardio endurance",
+          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
+          benefits: "Extended cardio, endurance building"
         },
         {
           name: "45 Minute Run",
           category: "Cardio",
-          muscleGroups: ["Cardio", "Legs"],
-          benefits: "Long distance cardio training",
+          bodyParts: ["legs", "cardio"],
+          difficulty: "intermediate",
+          timeEstimate: "45 minutes",
           sets: "1",
-          reps: "45 minutes",
-          equipment: "Treadmill/Track"
+          reps: "Steady pace",
+          equipment: "Treadmill/Track",
+          description: "Long distance cardio training",
+          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
+          benefits: "Long distance cardio, endurance"
         },
         {
           name: "1 Hour Run",
           category: "Cardio",
-          muscleGroups: ["Cardio", "Legs"],
-          benefits: "Endurance building and fat burning",
+          bodyParts: ["legs", "cardio"],
+          difficulty: "advanced",
+          timeEstimate: "60 minutes",
           sets: "1",
-          reps: "60 minutes",
-          equipment: "Treadmill/Track"
+          reps: "Steady pace",
+          equipment: "Treadmill/Track",
+          description: "Endurance building and fat burning",
+          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
+          benefits: "Endurance, fat burning, mental toughness"
         },
         {
           name: "2 Hour Run",
           category: "Cardio",
-          muscleGroups: ["Cardio", "Legs"],
-          benefits: "Ultra endurance training",
+          bodyParts: ["legs", "cardio"],
+          difficulty: "advanced",
+          timeEstimate: "120 minutes",
           sets: "1",
-          reps: "120 minutes",
-          equipment: "Treadmill/Track"
+          reps: "Steady pace",
+          equipment: "Treadmill/Track",
+          description: "Ultra endurance training",
+          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
+          benefits: "Ultra endurance, mental strength"
         },
         {
           name: "Cycling Intervals",
           category: "Cardio",
-          muscleGroups: ["Cardio", "Legs"],
-          benefits: "Low impact high intensity cardio",
+          bodyParts: ["legs", "cardio"],
+          difficulty: "intermediate",
+          timeEstimate: "30 minutes",
           sets: "6",
           reps: "2 minutes hard, 1 minute easy",
-          equipment: "Stationary Bike"
+          equipment: "Stationary Bike",
+          description: "Low impact high intensity cardio",
+          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
+          benefits: "Low impact, high intensity, leg strength"
         },
         {
           name: "Rowing Intervals",
           category: "Cardio",
-          muscleGroups: ["Cardio", "Full Body"],
-          benefits: "Full body cardio exercise",
+          bodyParts: ["full_body", "cardio"],
+          difficulty: "intermediate",
+          timeEstimate: "25 minutes",
           sets: "8",
           reps: "1 minute hard, 1 minute easy",
-          equipment: "Rowing Machine"
+          equipment: "Rowing Machine",
+          description: "Full body cardio exercise",
+          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
+          benefits: "Full body cardio, low impact, strength"
         }
       ]
     },
@@ -412,110 +494,159 @@ const WorkoutSidebar = () => {
         {
           name: "Push-ups",
           category: "Bodyweight",
-          muscleGroups: ["Chest", "Triceps", "Shoulders"],
-          benefits: "Classic upper body strength exercise",
+          bodyParts: ["chest", "arms", "shoulders"],
+          difficulty: "beginner",
+          timeEstimate: "20 minutes",
           sets: "3",
           reps: "10-20",
-          equipment: "None"
+          equipment: "None",
+          description: "Classic upper body strength exercise",
+          youtubeUrl: "https://youtu.be/IODxDxX7oi4",
+          benefits: "Upper body strength, no equipment, scalable"
         },
         {
           name: "Pull-ups",
           category: "Bodyweight",
-          muscleGroups: ["Back", "Biceps"],
-          benefits: "Upper body pulling strength",
+          bodyParts: ["back", "arms"],
+          difficulty: "intermediate",
+          timeEstimate: "25 minutes",
           sets: "3",
           reps: "5-15",
-          equipment: "Pull-up Bar"
+          equipment: "Pull-up Bar",
+          description: "Upper body pulling strength",
+          youtubeUrl: "https://youtu.be/eGo4IYlbE5g",
+          benefits: "Back strength, grip strength, bodyweight"
         },
         {
           name: "Dips",
           category: "Bodyweight",
-          muscleGroups: ["Chest", "Triceps"],
-          benefits: "Upper body pushing strength",
+          bodyParts: ["arms", "chest"],
+          difficulty: "intermediate",
+          timeEstimate: "20 minutes",
           sets: "3",
           reps: "8-15",
-          equipment: "Dip Bars"
+          equipment: "Dip Bars",
+          description: "Upper body pushing strength",
+          youtubeUrl: "https://youtu.be/2z8JmcrW-As",
+          benefits: "Tricep strength, chest involvement"
         },
         {
           name: "Squats",
           category: "Bodyweight",
-          muscleGroups: ["Legs", "Glutes"],
-          benefits: "Lower body strength foundation",
+          bodyParts: ["legs", "glutes"],
+          difficulty: "beginner",
+          timeEstimate: "15 minutes",
           sets: "3",
           reps: "15-25",
-          equipment: "None"
+          equipment: "None",
+          description: "Lower body strength foundation",
+          youtubeUrl: "https://youtu.be/YaXPRqUwItQ",
+          benefits: "Leg strength, no equipment, scalable"
         },
         {
           name: "Lunges",
           category: "Bodyweight",
-          muscleGroups: ["Legs", "Glutes"],
-          benefits: "Unilateral leg strength",
+          bodyParts: ["legs", "glutes"],
+          difficulty: "beginner",
+          timeEstimate: "20 minutes",
           sets: "3",
           reps: "10-15 each leg",
-          equipment: "None"
+          equipment: "None",
+          description: "Unilateral leg strength",
+          youtubeUrl: "https://youtu.be/3XDriUn0udo",
+          benefits: "Unilateral strength, balance, leg development"
         },
         {
           name: "Plank",
           category: "Bodyweight",
-          muscleGroups: ["Core"],
-          benefits: "Core stability and endurance",
+          bodyParts: ["core"],
+          difficulty: "beginner",
+          timeEstimate: "15 minutes",
           sets: "3",
           reps: "30-60 seconds",
-          equipment: "None"
+          equipment: "None",
+          description: "Core stability and endurance",
+          youtubeUrl: "https://youtu.be/ASdvN_XEl_c",
+          benefits: "Core strength, stability, no equipment"
         },
         {
           name: "Side Plank",
           category: "Bodyweight",
-          muscleGroups: ["Core", "Obliques"],
-          benefits: "Lateral core stability",
+          bodyParts: ["core"],
+          difficulty: "intermediate",
+          timeEstimate: "15 minutes",
           sets: "3",
           reps: "30-45 seconds each side",
-          equipment: "None"
+          equipment: "None",
+          description: "Lateral core stability",
+          youtubeUrl: "https://youtu.be/ASdvN_XEl_c",
+          benefits: "Lateral core strength, balance"
         },
         {
           name: "Glute Bridges",
           category: "Bodyweight",
-          muscleGroups: ["Glutes", "Core"],
-          benefits: "Glute activation and strength",
+          bodyParts: ["glutes", "core"],
+          difficulty: "beginner",
+          timeEstimate: "15 minutes",
           sets: "3",
           reps: "15-20",
-          equipment: "None"
+          equipment: "None",
+          description: "Glute activation and strength",
+          youtubeUrl: "https://youtu.be/OUgsJ8RpQqY",
+          benefits: "Glute activation, core engagement"
         },
         {
           name: "Wall Sit",
           category: "Bodyweight",
-          muscleGroups: ["Legs", "Glutes"],
-          benefits: "Isometric leg strength",
+          bodyParts: ["legs", "glutes"],
+          difficulty: "beginner",
+          timeEstimate: "10 minutes",
           sets: "3",
           reps: "30-60 seconds",
-          equipment: "Wall"
+          equipment: "Wall",
+          description: "Isometric leg strength",
+          youtubeUrl: "https://youtu.be/YaXPRqUwItQ",
+          benefits: "Isometric strength, endurance"
         },
         {
           name: "Handstand Hold",
           category: "Bodyweight",
-          muscleGroups: ["Shoulders", "Core"],
-          benefits: "Advanced shoulder strength and balance",
+          bodyParts: ["shoulders", "core"],
+          difficulty: "advanced",
+          timeEstimate: "30 minutes",
           sets: "3",
           reps: "10-30 seconds",
-          equipment: "Wall"
+          equipment: "Wall",
+          description: "Advanced shoulder strength and balance",
+          youtubeUrl: "https://youtu.be/0WxPvV8y5t4",
+          benefits: "Shoulder strength, balance, advanced skill"
         }
       ]
     }
   };
 
-  // Search functionality
+  // Search and filter functionality
   const filteredWorkouts = useMemo(() => {
-    if (!searchTerm) return workoutCategories;
+    let filtered = {};
     
-    const filtered = {};
     Object.entries(workoutCategories).forEach(([key, category]) => {
-      const filteredWorkouts = category.workouts.filter(workout =>
-        workout.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        workout.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        workout.muscleGroups.some(muscle => 
-          muscle.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      );
+      const filteredWorkouts = category.workouts.filter(workout => {
+        const matchesSearch = !searchTerm || 
+          workout.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          workout.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          workout.bodyParts.some(part => 
+            part.toLowerCase().includes(searchTerm.toLowerCase())
+          ) ||
+          workout.description.toLowerCase().includes(searchTerm.toLowerCase());
+        
+        const matchesBodyPart = selectedBodyPart === 'all' || 
+          workout.bodyParts.includes(selectedBodyPart);
+        
+        const matchesDifficulty = selectedDifficulty === 'all' || 
+          workout.difficulty === selectedDifficulty;
+        
+        return matchesSearch && matchesBodyPart && matchesDifficulty;
+      });
       
       if (filteredWorkouts.length > 0) {
         filtered[key] = {
@@ -526,7 +657,7 @@ const WorkoutSidebar = () => {
     });
     
     return filtered;
-  }, [searchTerm]);
+  }, [searchTerm, selectedBodyPart, selectedDifficulty]);
 
   const handleWorkoutDrag = (e, workout) => {
     e.dataTransfer.setData('text/plain', JSON.stringify(workout));
@@ -570,9 +701,42 @@ const WorkoutSidebar = () => {
             onClick={() => setSearchTerm('')}
             className="clear-search-btn"
           >
-            ✕
+            X
           </button>
         )}
+      </div>
+
+      {/* Filter Controls */}
+      <div className="filter-controls">
+        <div className="filter-group">
+          <label>Body Part:</label>
+          <select
+            value={selectedBodyPart}
+            onChange={(e) => setSelectedBodyPart(e.target.value)}
+            className="filter-select"
+          >
+            {bodyParts.map(part => (
+              <option key={part.value} value={part.value}>
+                {part.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        
+        <div className="filter-group">
+          <label>Difficulty:</label>
+          <select
+            value={selectedDifficulty}
+            onChange={(e) => setSelectedDifficulty(e.target.value)}
+            className="filter-select"
+          >
+            {difficulties.map(diff => (
+              <option key={diff.value} value={diff.value}>
+                {diff.label}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div className="workout-plans">
@@ -596,6 +760,8 @@ const WorkoutSidebar = () => {
                   <div className="exercise-details">
                     {workout.sets} sets × {workout.reps}
                   </div>
+                  <div className="exercise-time">{workout.timeEstimate}</div>
+                  <div className="exercise-difficulty">{workout.difficulty}</div>
                   <div className="exercise-equipment">{workout.equipment}</div>
                 </motion.div>
               ))}
@@ -620,20 +786,38 @@ const WorkoutSidebar = () => {
               <span>{hoveredWorkout.category}</span>
             </div>
             <div className="tooltip-section">
-              <strong>Muscle Groups:</strong>
-              <div className="muscle-tags">
-                {hoveredWorkout.muscleGroups.map(muscle => (
-                  <span key={muscle} className="muscle-tag">{muscle}</span>
+              <strong>Body Parts:</strong>
+              <div className="body-part-tags">
+                {hoveredWorkout.bodyParts.map(part => (
+                  <span key={part} className="body-part-tag">{part}</span>
                 ))}
               </div>
+            </div>
+            <div className="tooltip-section">
+              <strong>Difficulty:</strong>
+              <span>{hoveredWorkout.difficulty}</span>
+            </div>
+            <div className="tooltip-section">
+              <strong>Time:</strong>
+              <span>{hoveredWorkout.timeEstimate}</span>
+            </div>
+            <div className="tooltip-section">
+              <strong>Equipment:</strong>
+              <span>{workout.equipment}</span>
+            </div>
+            <div className="tooltip-section">
+              <strong>Description:</strong>
+              <p>{hoveredWorkout.description}</p>
             </div>
             <div className="tooltip-section">
               <strong>Benefits:</strong>
               <p>{hoveredWorkout.benefits}</p>
             </div>
             <div className="tooltip-section">
-              <strong>Equipment:</strong>
-              <span>{hoveredWorkout.equipment}</span>
+              <strong>Video:</strong>
+              <a href={hoveredWorkout.youtubeUrl} target="_blank" rel="noopener noreferrer" className="video-link">
+                Watch Tutorial
+              </a>
             </div>
           </motion.div>
         )}
@@ -657,11 +841,15 @@ const CustomWorkoutForm = ({ onSubmit, onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     category: '',
-    muscleGroups: '',
-    benefits: '',
+    bodyParts: '',
+    difficulty: '',
+    timeEstimate: '',
     sets: '',
     reps: '',
-    equipment: ''
+    equipment: '',
+    description: '',
+    benefits: '',
+    youtubeUrl: ''
   });
 
   const handleSubmit = (e) => {
@@ -708,6 +896,7 @@ const CustomWorkoutForm = ({ onSubmit, onClose }) => {
               <option value="">Select Category</option>
               <option value="Strength Training">Strength Training</option>
               <option value="Pilates">Pilates</option>
+              <option value="Yoga">Yoga</option>
               <option value="HIIT">HIIT</option>
               <option value="Cardio">Cardio</option>
               <option value="Bodyweight">Bodyweight</option>
@@ -715,22 +904,35 @@ const CustomWorkoutForm = ({ onSubmit, onClose }) => {
           </div>
           
           <div className="form-group">
-            <label>Muscle Groups</label>
+            <label>Body Parts (comma separated)</label>
             <input
               type="text"
-              value={formData.muscleGroups}
-              onChange={(e) => setFormData({...formData, muscleGroups: e.target.value})}
-              placeholder="e.g., Quadriceps, Glutes"
+              value={formData.bodyParts}
+              onChange={(e) => setFormData({...formData, bodyParts: e.target.value})}
+              placeholder="e.g., chest, triceps, shoulders"
             />
           </div>
           
           <div className="form-group">
-            <label>Benefits</label>
-            <textarea
-              value={formData.benefits}
-              onChange={(e) => setFormData({...formData, benefits: e.target.value})}
-              placeholder="Describe the benefits of this exercise"
-              rows="3"
+            <label>Difficulty</label>
+            <select
+              value={formData.difficulty}
+              onChange={(e) => setFormData({...formData, difficulty: e.target.value})}
+            >
+              <option value="">Select Difficulty</option>
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+          </div>
+          
+          <div className="form-group">
+            <label>Time Estimate</label>
+            <input
+              type="text"
+              value={formData.timeEstimate}
+              onChange={(e) => setFormData({...formData, timeEstimate: e.target.value})}
+              placeholder="e.g., 30 minutes"
             />
           </div>
           
@@ -763,6 +965,36 @@ const CustomWorkoutForm = ({ onSubmit, onClose }) => {
               value={formData.equipment}
               onChange={(e) => setFormData({...formData, equipment: e.target.value})}
               placeholder="e.g., Dumbbells, None"
+            />
+          </div>
+          
+          <div className="form-group">
+            <label>Description</label>
+            <textarea
+              value={formData.description}
+              onChange={(e) => setFormData({...formData, description: e.target.value})}
+              placeholder="Describe the exercise"
+              rows="3"
+            />
+          </div>
+          
+          <div className="form-group">
+            <label>Benefits</label>
+            <textarea
+              value={formData.benefits}
+              onChange={(e) => setFormData({...formData, benefits: e.target.value})}
+              placeholder="Describe the benefits"
+              rows="3"
+            />
+          </div>
+          
+          <div className="form-group">
+            <label>YouTube URL (optional)</label>
+            <input
+              type="url"
+              value={formData.youtubeUrl}
+              onChange={(e) => setFormData({...formData, youtubeUrl: e.target.value})}
+              placeholder="https://youtu.be/..."
             />
           </div>
           
