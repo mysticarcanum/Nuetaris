@@ -1,0 +1,326 @@
+.workout-sidebar {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  height: fit-content;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(255, 140, 0, 0.2);
+}
+
+.sidebar-header h3 {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #333;
+  margin: 0;
+}
+
+.add-custom-btn {
+  background: linear-gradient(45deg, #ff8c00, #ff6b35);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-custom-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
+}
+
+.workout-plans {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.workout-plan {
+  border: 1px solid rgba(255, 140, 0, 0.2);
+  border-radius: 12px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.plan-title {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #333;
+  margin-bottom: 12px;
+  text-align: center;
+  padding: 8px;
+  background: linear-gradient(45deg, #ff8c00, #ff6b35);
+  color: white;
+  border-radius: 8px;
+}
+
+.exercises-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.exercise-item {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 140, 0, 0.2);
+  border-radius: 8px;
+  padding: 10px;
+  cursor: grab;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.exercise-item:hover {
+  background: rgba(255, 140, 0, 0.1);
+  border-color: rgba(255, 140, 0, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.exercise-item:active {
+  cursor: grabbing;
+}
+
+.exercise-name {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.exercise-details {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 400;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* Exercise Tooltip */
+.exercise-tooltip {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 15px;
+  border-radius: 12px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.9rem;
+  max-width: 300px;
+  z-index: 1000;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.exercise-tooltip h4 {
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: #ff8c00;
+}
+
+.tooltip-section {
+  margin-bottom: 10px;
+}
+
+.tooltip-section strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #ff8c00;
+}
+
+.muscle-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 5px;
+}
+
+.muscle-tag {
+  background: rgba(255, 140, 0, 0.2);
+  color: #ff8c00;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.tooltip-section p {
+  margin: 0;
+  line-height: 1.4;
+  color: #ccc;
+}
+
+/* Custom Form Styles */
+.custom-form-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.custom-form {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.custom-form h3 {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid rgba(255, 140, 0, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #333;
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: rgba(255, 140, 0, 0.5);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.1);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.cancel-btn,
+.submit-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn {
+  background: rgba(255, 255, 255, 0.8);
+  color: #666;
+  border: 1px solid rgba(102, 102, 102, 0.3);
+}
+
+.cancel-btn:hover {
+  background: rgba(255, 255, 255, 1);
+  color: #333;
+}
+
+.submit-btn {
+  background: linear-gradient(45deg, #ff8c00, #ff6b35);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 140, 0, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .workout-sidebar {
+    padding: 15px;
+  }
+  
+  .exercise-item {
+    padding: 8px;
+  }
+  
+  .exercise-name {
+    font-size: 0.8rem;
+  }
+  
+  .exercise-details {
+    font-size: 0.7rem;
+  }
+  
+  .custom-form {
+    padding: 20px;
+    margin: 10px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Touch-friendly interactions */
+@media (hover: none) and (pointer: coarse) {
+  .exercise-item:hover {
+    transform: none;
+  }
+  
+  .exercise-item:active {
+    background: rgba(255, 140, 0, 0.1);
+    transform: scale(0.98);
+  }
+}
