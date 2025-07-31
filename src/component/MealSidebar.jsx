@@ -7,8 +7,38 @@ const MealSidebar = () => {
   const [showCustomForm, setShowCustomForm] = useState(false);
   const [hoveredMeal, setHoveredMeal] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCuisine, setSelectedCuisine] = useState('all');
+  const [selectedMealType, setSelectedMealType] = useState('all');
+  const [expandedMeal, setExpandedMeal] = useState(null);
 
-  // Comprehensive meal database with 200+ options
+  // Cuisine filter options
+  const cuisines = [
+    { value: 'all', label: 'All Cuisines' },
+    { value: 'Western', label: 'Western' },
+    { value: 'Chinese', label: 'Chinese' },
+    { value: 'Indian', label: 'Indian' },
+    { value: 'Italian', label: 'Italian' },
+    { value: 'Japanese', label: 'Japanese' },
+    { value: 'Thai', label: 'Thai' },
+    { value: 'Mexican', label: 'Mexican' },
+    { value: 'Korean', label: 'Korean' },
+    { value: 'Middle Eastern', label: 'Middle Eastern' },
+    { value: 'British', label: 'British' },
+    { value: 'American', label: 'American' },
+    { value: 'Healthy', label: 'Healthy' },
+    { value: 'Snack', label: 'Snack' }
+  ];
+
+  // Meal type filter options
+  const mealTypes = [
+    { value: 'all', label: 'All Types' },
+    { value: 'breakfast', label: 'Breakfast' },
+    { value: 'lunch', label: 'Lunch' },
+    { value: 'dinner', label: 'Dinner' },
+    { value: 'snack', label: 'Snack' }
+  ];
+
+  // Comprehensive meal database with detailed recipes
   const mealCategories = {
     breakfast: {
       name: "Breakfast",
@@ -16,154 +46,137 @@ const MealSidebar = () => {
         // Western Breakfast
         {
           name: "Greek Yogurt Bowl",
+          cuisine: "Western",
+          mealType: "breakfast",
           cookTime: "5 minutes",
           nutrition: "High protein, probiotics, calcium",
           calories: 180,
           protein: "15g",
           carbs: "20g",
           fat: "5g",
-          cuisine: "Western"
+          ingredients: [
+            "1 cup Greek yogurt",
+            "1/4 cup granola",
+            "1/2 cup mixed berries",
+            "1 tbsp honey",
+            "1 tbsp chopped nuts"
+          ],
+          instructions: [
+            "Scoop Greek yogurt into a bowl",
+            "Top with granola and fresh berries",
+            "Drizzle with honey",
+            "Sprinkle with chopped nuts",
+            "Serve immediately"
+          ],
+          tips: "Use full-fat Greek yogurt for creamier texture. Can be prepared the night before."
         },
         {
           name: "Oatmeal with Berries",
+          cuisine: "Western",
+          mealType: "breakfast",
           cookTime: "10 minutes",
           nutrition: "Fiber-rich, antioxidants, sustained energy",
           calories: 220,
           protein: "8g",
           carbs: "35g",
           fat: "4g",
-          cuisine: "Western"
+          ingredients: [
+            "1/2 cup rolled oats",
+            "1 cup water or milk",
+            "1/4 cup mixed berries",
+            "1 tbsp maple syrup",
+            "Pinch of salt"
+          ],
+          instructions: [
+            "Bring water/milk to boil in a saucepan",
+            "Add oats and salt, reduce heat to low",
+            "Cook for 5-7 minutes, stirring occasionally",
+            "Top with berries and maple syrup",
+            "Let stand for 2 minutes before serving"
+          ],
+          tips: "Use steel-cut oats for more texture. Add cinnamon for extra flavor."
         },
         {
           name: "Scrambled Eggs on Toast",
+          cuisine: "Western",
+          mealType: "breakfast",
           cookTime: "8 minutes",
           nutrition: "Complete protein, B vitamins, choline",
           calories: 280,
           protein: "18g",
           carbs: "25g",
           fat: "12g",
-          cuisine: "Western"
-        },
-        {
-          name: "Smoothie Bowl",
-          cookTime: "7 minutes",
-          nutrition: "Vitamins, minerals, fiber, antioxidants",
-          calories: 250,
-          protein: "12g",
-          carbs: "30g",
-          fat: "8g",
-          cuisine: "Western"
-        },
-        {
-          name: "Avocado Toast",
-          cookTime: "5 minutes",
-          nutrition: "Healthy fats, fiber, potassium",
-          calories: 320,
-          protein: "10g",
-          carbs: "30g",
-          fat: "18g",
-          cuisine: "Western"
-        },
-        {
-          name: "Pancakes with Maple Syrup",
-          cookTime: "15 minutes",
-          nutrition: "Quick energy, comfort food",
-          calories: 380,
-          protein: "8g",
-          carbs: "55g",
-          fat: "12g",
-          cuisine: "Western"
-        },
-        {
-          name: "Full English Breakfast",
-          cookTime: "20 minutes",
-          nutrition: "Protein-rich, traditional British",
-          calories: 650,
-          protein: "35g",
-          carbs: "25g",
-          fat: "45g",
-          cuisine: "Western"
-        },
-        {
-          name: "French Toast",
-          cookTime: "12 minutes",
-          nutrition: "Protein, carbs, comfort food",
-          calories: 320,
-          protein: "12g",
-          carbs: "40g",
-          fat: "12g",
-          cuisine: "Western"
-        },
-        {
-          name: "Breakfast Burrito",
-          cookTime: "15 minutes",
-          nutrition: "Protein, fiber, Mexican flavors",
-          calories: 420,
-          protein: "22g",
-          carbs: "35g",
-          fat: "18g",
-          cuisine: "Western"
-        },
-        {
-          name: "Granola with Milk",
-          cookTime: "2 minutes",
-          nutrition: "Fiber, protein, sustained energy",
-          calories: 280,
-          protein: "10g",
-          carbs: "45g",
-          fat: "8g",
-          cuisine: "Western"
+          ingredients: [
+            "2 large eggs",
+            "1 slice whole grain bread",
+            "1 tbsp butter",
+            "Salt and pepper to taste",
+            "Fresh herbs (optional)"
+          ],
+          instructions: [
+            "Toast bread until golden brown",
+            "Crack eggs into a bowl and whisk",
+            "Melt butter in a non-stick pan over medium heat",
+            "Add eggs and cook, stirring gently",
+            "Season with salt and pepper",
+            "Serve over toast with fresh herbs"
+          ],
+          tips: "Don't over-stir the eggs for fluffier texture. Add a splash of milk for creaminess."
         },
         // Chinese Breakfast
         {
           name: "Congee (Rice Porridge)",
+          cuisine: "Chinese",
+          mealType: "breakfast",
           cookTime: "30 minutes",
           nutrition: "Easy to digest, warming, traditional",
           calories: 180,
           protein: "4g",
           carbs: "35g",
           fat: "2g",
-          cuisine: "Chinese"
-        },
-        {
-          name: "Dim Sum (Steamed Dumplings)",
-          cookTime: "15 minutes",
-          nutrition: "Protein, vegetables, steamed healthy",
-          calories: 250,
-          protein: "12g",
-          carbs: "30g",
-          fat: "8g",
-          cuisine: "Chinese"
+          ingredients: [
+            "1/2 cup white rice",
+            "4 cups water",
+            "1/2 tsp salt",
+            "1 green onion, chopped",
+            "1 tbsp soy sauce"
+          ],
+          instructions: [
+            "Rinse rice until water runs clear",
+            "Combine rice and water in a large pot",
+            "Bring to boil, then reduce to simmer",
+            "Cook for 25-30 minutes, stirring occasionally",
+            "Season with salt and soy sauce",
+            "Garnish with green onions"
+          ],
+          tips: "Can be made in advance and reheated. Add ginger for extra flavor."
         },
         {
           name: "Jianbing (Chinese Crepe)",
+          cuisine: "Chinese",
+          mealType: "breakfast",
           cookTime: "8 minutes",
           nutrition: "Protein, vegetables, street food",
           calories: 320,
           protein: "15g",
           carbs: "35g",
           fat: "12g",
-          cuisine: "Chinese"
-        },
-        {
-          name: "Soy Milk with You Tiao",
-          cookTime: "5 minutes",
-          nutrition: "Protein, traditional Chinese breakfast",
-          calories: 280,
-          protein: "10g",
-          carbs: "40g",
-          fat: "8g",
-          cuisine: "Chinese"
-        },
-        {
-          name: "Steamed Baozi",
-          cookTime: "12 minutes",
-          nutrition: "Protein, steamed, traditional",
-          calories: 220,
-          protein: "8g",
-          carbs: "35g",
-          fat: "4g",
-          cuisine: "Chinese"
+          ingredients: [
+            "1/2 cup all-purpose flour",
+            "1/4 cup water",
+            "1 egg",
+            "1 green onion, chopped",
+            "1 tbsp hoisin sauce"
+          ],
+          instructions: [
+            "Mix flour and water to form a thin batter",
+            "Heat a non-stick pan over medium heat",
+            "Pour batter and spread thinly",
+            "Crack egg on top and spread",
+            "Add green onions and fold",
+            "Brush with hoisin sauce and serve"
+          ],
+          tips: "Use a large pan for easier flipping. Can add vegetables for extra nutrition."
         }
       ]
     },
@@ -173,184 +186,109 @@ const MealSidebar = () => {
         // Western Lunch
         {
           name: "Chicken Caesar Salad",
+          cuisine: "Western",
+          mealType: "lunch",
           cookTime: "15 minutes",
           nutrition: "Lean protein, fiber, vitamins A & K",
           calories: 320,
           protein: "28g",
           carbs: "15g",
           fat: "16g",
-          cuisine: "Western"
+          ingredients: [
+            "1 chicken breast, grilled",
+            "2 cups romaine lettuce",
+            "1/4 cup croutons",
+            "2 tbsp Caesar dressing",
+            "1/4 cup parmesan cheese"
+          ],
+          instructions: [
+            "Grill chicken breast until cooked through",
+            "Chop lettuce and place in bowl",
+            "Slice chicken and add to salad",
+            "Top with croutons and parmesan",
+            "Drizzle with Caesar dressing and toss"
+          ],
+          tips: "Use leftover chicken for quick preparation. Add cherry tomatoes for color."
         },
         {
           name: "Tuna Sandwich",
+          cuisine: "Western",
+          mealType: "lunch",
           cookTime: "5 minutes",
           nutrition: "Omega-3 fatty acids, protein, B vitamins",
           calories: 290,
           protein: "22g",
           carbs: "35g",
           fat: "8g",
-          cuisine: "Western"
-        },
-        {
-          name: "Quinoa Buddha Bowl",
-          cookTime: "20 minutes",
-          nutrition: "Complete protein, fiber, antioxidants",
-          calories: 380,
-          protein: "16g",
-          carbs: "45g",
-          fat: "12g",
-          cuisine: "Western"
-        },
-        {
-          name: "Supermarket Meal Deal",
-          cookTime: "2 minutes",
-          nutrition: "Convenient, varied nutrients",
-          calories: 450,
-          protein: "18g",
-          carbs: "55g",
-          fat: "15g",
-          cuisine: "Western"
-        },
-        {
-          name: "Grilled Chicken Wrap",
-          cookTime: "12 minutes",
-          nutrition: "Lean protein, vegetables, portable",
-          calories: 350,
-          protein: "25g",
-          carbs: "30g",
-          fat: "12g",
-          cuisine: "Western"
-        },
-        {
-          name: "Pasta Salad",
-          cookTime: "18 minutes",
-          nutrition: "Complex carbs, vegetables, cooling",
-          calories: 320,
-          protein: "10g",
-          carbs: "45g",
-          fat: "10g",
-          cuisine: "Western"
-        },
-        {
-          name: "Beef Burger",
-          cookTime: "15 minutes",
-          nutrition: "Protein, iron, satisfying meal",
-          calories: 550,
-          protein: "30g",
-          carbs: "45g",
-          fat: "25g",
-          cuisine: "Western"
-        },
-        {
-          name: "Fish & Chips",
-          cookTime: "20 minutes",
-          nutrition: "Protein, carbs, traditional British",
-          calories: 850,
-          protein: "35g",
-          carbs: "80g",
-          fat: "45g",
-          cuisine: "Western"
-        },
-        {
-          name: "Pizza Slice",
-          cookTime: "8 minutes",
-          nutrition: "Quick, satisfying, social meal",
-          calories: 300,
-          protein: "12g",
-          carbs: "35g",
-          fat: "12g",
-          cuisine: "Western"
-        },
-        {
-          name: "Sushi Roll Set",
-          cookTime: "10 minutes",
-          nutrition: "Lean protein, omega-3, low-fat",
-          calories: 320,
-          protein: "18g",
-          carbs: "45g",
-          fat: "8g",
-          cuisine: "Western"
+          ingredients: [
+            "1 can tuna in water",
+            "2 slices whole grain bread",
+            "1 tbsp mayonnaise",
+            "1/4 cup diced celery",
+            "Salt and pepper to taste"
+          ],
+          instructions: [
+            "Drain tuna and flake with fork",
+            "Mix with mayonnaise and celery",
+            "Season with salt and pepper",
+            "Spread on bread and close sandwich",
+            "Cut diagonally and serve"
+          ],
+          tips: "Add diced red onion for extra flavor. Use Greek yogurt instead of mayo for less fat."
         },
         // Chinese Lunch
         {
           name: "Kung Pao Chicken",
+          cuisine: "Chinese",
+          mealType: "lunch",
           cookTime: "20 minutes",
           nutrition: "Protein, vegetables, spicy flavors",
           calories: 380,
           protein: "25g",
           carbs: "25g",
           fat: "18g",
-          cuisine: "Chinese"
-        },
-        {
-          name: "Sweet & Sour Pork",
-          cookTime: "25 minutes",
-          nutrition: "Protein, tangy flavors, vegetables",
-          calories: 420,
-          protein: "22g",
-          carbs: "35g",
-          fat: "20g",
-          cuisine: "Chinese"
+          ingredients: [
+            "1 chicken breast, diced",
+            "2 tbsp soy sauce",
+            "1 tbsp rice wine",
+            "1/2 cup peanuts",
+            "2 green onions, chopped",
+            "2 tbsp vegetable oil"
+          ],
+          instructions: [
+            "Marinate chicken in soy sauce and rice wine",
+            "Heat oil in wok over high heat",
+            "Stir-fry chicken until golden",
+            "Add peanuts and green onions",
+            "Cook for 2 minutes and serve"
+          ],
+          tips: "Use a wok for authentic flavor. Adjust spice level with chili peppers."
         },
         {
           name: "Mapo Tofu",
+          cuisine: "Chinese",
+          mealType: "lunch",
           cookTime: "15 minutes",
           nutrition: "Plant protein, spicy, traditional",
           calories: 280,
           protein: "15g",
           carbs: "20g",
           fat: "12g",
-          cuisine: "Chinese"
-        },
-        {
-          name: "Beef & Broccoli",
-          cookTime: "18 minutes",
-          nutrition: "Protein, iron, vegetables",
-          calories: 350,
-          protein: "28g",
-          carbs: "22g",
-          fat: "15g",
-          cuisine: "Chinese"
-        },
-        {
-          name: "Fried Rice",
-          cookTime: "12 minutes",
-          nutrition: "Carbs, protein, vegetables",
-          calories: 320,
-          protein: "10g",
-          carbs: "45g",
-          fat: "10g",
-          cuisine: "Chinese"
-        },
-        {
-          name: "Wonton Soup",
-          cookTime: "20 minutes",
-          nutrition: "Protein, warming, light meal",
-          calories: 220,
-          protein: "15g",
-          carbs: "25g",
-          fat: "6g",
-          cuisine: "Chinese"
-        },
-        {
-          name: "Peking Duck",
-          cookTime: "90 minutes",
-          nutrition: "Protein, traditional, special occasion",
-          calories: 450,
-          protein: "35g",
-          carbs: "15g",
-          fat: "25g",
-          cuisine: "Chinese"
-        },
-        {
-          name: "Hot Pot",
-          cookTime: "30 minutes",
-          nutrition: "Protein, vegetables, social meal",
-          calories: 380,
-          protein: "25g",
-          carbs: "20g",
-          fat: "18g",
-          cuisine: "Chinese"
+          ingredients: [
+            "1 block firm tofu, cubed",
+            "2 tbsp doubanjiang (spicy bean paste)",
+            "1 tbsp soy sauce",
+            "2 green onions, chopped",
+            "1 tbsp vegetable oil"
+          ],
+          instructions: [
+            "Heat oil in a wok over medium heat",
+            "Add doubanjiang and stir-fry for 30 seconds",
+            "Add tofu cubes and gently stir",
+            "Add soy sauce and green onions",
+            "Cook for 5 minutes and serve"
+          ],
+          tips: "Handle tofu gently to prevent breaking. Add ground pork for extra protein."
         }
       ]
     },
@@ -360,204 +298,85 @@ const MealSidebar = () => {
         // Western Dinner
         {
           name: "Grilled Salmon with Vegetables",
+          cuisine: "Western",
+          mealType: "dinner",
           cookTime: "25 minutes",
           nutrition: "Omega-3, protein, fiber, vitamins",
           calories: 420,
           protein: "35g",
           carbs: "20g",
           fat: "22g",
-          cuisine: "Western"
-        },
-        {
-          name: "Stir-Fried Chicken",
-          cookTime: "20 minutes",
-          nutrition: "Lean protein, vegetables, low-carb",
-          calories: 380,
-          protein: "32g",
-          carbs: "18g",
-          fat: "16g",
-          cuisine: "Western"
-        },
-        {
-          name: "Vegetarian Pasta",
-          cookTime: "30 minutes",
-          nutrition: "Complex carbs, fiber, plant protein",
-          calories: 450,
-          protein: "14g",
-          carbs: "65g",
-          fat: "12g",
-          cuisine: "Western"
-        },
-        {
-          name: "Pizza (Takeaway)",
-          cookTime: "45 minutes",
-          nutrition: "Quick, satisfying, social meal",
-          calories: 600,
-          protein: "25g",
-          carbs: "70g",
-          fat: "25g",
-          cuisine: "Western"
-        },
-        {
-          name: "Beef Steak with Potatoes",
-          cookTime: "35 minutes",
-          nutrition: "Protein, iron, complex carbs",
-          calories: 580,
-          protein: "40g",
-          carbs: "35g",
-          fat: "28g",
-          cuisine: "Western"
-        },
-        {
-          name: "Chicken Tikka Masala",
-          cookTime: "40 minutes",
-          nutrition: "Protein, spices, creamy sauce",
-          calories: 480,
-          protein: "22g",
-          carbs: "55g",
-          fat: "18g",
-          cuisine: "Western"
+          ingredients: [
+            "1 salmon fillet (6 oz)",
+            "1 cup mixed vegetables",
+            "2 tbsp olive oil",
+            "1 lemon, sliced",
+            "Salt and pepper to taste"
+          ],
+          instructions: [
+            "Preheat grill to medium-high heat",
+            "Season salmon with salt and pepper",
+            "Brush vegetables with olive oil",
+            "Grill salmon for 4-5 minutes per side",
+            "Grill vegetables until tender",
+            "Serve with lemon wedges"
+          ],
+          tips: "Don't overcook salmon - it should be slightly pink in center. Use a fish basket for easier grilling."
         },
         {
           name: "Spaghetti Carbonara",
+          cuisine: "Western",
+          mealType: "dinner",
           cookTime: "25 minutes",
           nutrition: "Protein, carbs, creamy sauce",
           calories: 520,
           protein: "20g",
           carbs: "60g",
           fat: "22g",
-          cuisine: "Western"
-        },
-        {
-          name: "Roast Chicken",
-          cookTime: "90 minutes",
-          nutrition: "Protein, traditional Sunday meal",
-          calories: 450,
-          protein: "35g",
-          carbs: "15g",
-          fat: "25g",
-          cuisine: "Western"
-        },
-        {
-          name: "Fish & Chips",
-          cookTime: "20 minutes",
-          nutrition: "Protein, carbs, traditional British",
-          calories: 850,
-          protein: "35g",
-          carbs: "80g",
-          fat: "45g",
-          cuisine: "Western"
-        },
-        {
-          name: "Burger & Fries",
-          cookTime: "15 minutes",
-          nutrition: "Protein, carbs, satisfying meal",
-          calories: 750,
-          protein: "30g",
-          carbs: "65g",
-          fat: "35g",
-          cuisine: "Western"
+          ingredients: [
+            "8 oz spaghetti",
+            "4 slices bacon, diced",
+            "2 large eggs",
+            "1/2 cup parmesan cheese",
+            "Black pepper to taste"
+          ],
+          instructions: [
+            "Cook pasta according to package directions",
+            "Cook bacon until crispy",
+            "Beat eggs with parmesan and pepper",
+            "Drain pasta, reserving 1/2 cup water",
+            "Add hot pasta to eggs, stirring quickly",
+            "Add bacon and serve immediately"
+          ],
+          tips: "Use hot pasta to cook eggs without scrambling. Add pasta water if sauce is too thick."
         },
         // Chinese Dinner
         {
-          name: "Kung Pao Chicken",
-          cookTime: "20 minutes",
-          nutrition: "Protein, vegetables, spicy flavors",
-          calories: 380,
-          protein: "25g",
-          carbs: "25g",
-          fat: "18g",
-          cuisine: "Chinese"
-        },
-        {
           name: "Sweet & Sour Pork",
+          cuisine: "Chinese",
+          mealType: "dinner",
           cookTime: "25 minutes",
           nutrition: "Protein, tangy flavors, vegetables",
           calories: 420,
           protein: "22g",
           carbs: "35g",
           fat: "20g",
-          cuisine: "Chinese"
-        },
-        {
-          name: "Mapo Tofu",
-          cookTime: "15 minutes",
-          nutrition: "Plant protein, spicy, traditional",
-          calories: 280,
-          protein: "15g",
-          carbs: "20g",
-          fat: "12g",
-          cuisine: "Chinese"
-        },
-        {
-          name: "Beef & Broccoli",
-          cookTime: "18 minutes",
-          nutrition: "Protein, iron, vegetables",
-          calories: 350,
-          protein: "28g",
-          carbs: "22g",
-          fat: "15g",
-          cuisine: "Chinese"
-        },
-        {
-          name: "Fried Rice",
-          cookTime: "12 minutes",
-          nutrition: "Carbs, protein, vegetables",
-          calories: 320,
-          protein: "10g",
-          carbs: "45g",
-          fat: "10g",
-          cuisine: "Chinese"
-        },
-        {
-          name: "Wonton Soup",
-          cookTime: "20 minutes",
-          nutrition: "Protein, warming, light meal",
-          calories: 220,
-          protein: "15g",
-          carbs: "25g",
-          fat: "6g",
-          cuisine: "Chinese"
-        },
-        {
-          name: "Peking Duck",
-          cookTime: "90 minutes",
-          nutrition: "Protein, traditional, special occasion",
-          calories: 450,
-          protein: "35g",
-          carbs: "15g",
-          fat: "25g",
-          cuisine: "Chinese"
-        },
-        {
-          name: "Hot Pot",
-          cookTime: "30 minutes",
-          nutrition: "Protein, vegetables, social meal",
-          calories: 380,
-          protein: "25g",
-          carbs: "20g",
-          fat: "18g",
-          cuisine: "Chinese"
-        },
-        {
-          name: "Dim Sum Feast",
-          cookTime: "25 minutes",
-          nutrition: "Variety, steamed, traditional",
-          calories: 350,
-          protein: "18g",
-          carbs: "40g",
-          fat: "12g",
-          cuisine: "Chinese"
-        },
-        {
-          name: "Szechuan Beef",
-          cookTime: "22 minutes",
-          nutrition: "Protein, spicy, numbing flavors",
-          calories: 420,
-          protein: "30g",
-          carbs: "28g",
-          fat: "20g",
-          cuisine: "Chinese"
+          ingredients: [
+            "1 lb pork, cubed",
+            "1/4 cup cornstarch",
+            "2 tbsp soy sauce",
+            "1/4 cup vinegar",
+            "2 tbsp sugar",
+            "1 bell pepper, sliced"
+          ],
+          instructions: [
+            "Coat pork in cornstarch",
+            "Deep fry pork until golden",
+            "Mix soy sauce, vinegar, and sugar",
+            "Stir-fry bell pepper",
+            "Add sauce and pork, cook until thickened"
+          ],
+          tips: "Use a wok for authentic cooking. Add pineapple for extra sweetness."
         }
       ]
     },
@@ -567,154 +386,110 @@ const MealSidebar = () => {
         // Healthy Snacks
         {
           name: "Apple with Peanut Butter",
+          cuisine: "Healthy",
+          mealType: "snack",
           cookTime: "2 minutes",
           nutrition: "Fiber, healthy fats, protein",
           calories: 180,
           protein: "6g",
           carbs: "25g",
           fat: "8g",
-          cuisine: "Healthy"
+          ingredients: [
+            "1 medium apple, sliced",
+            "2 tbsp natural peanut butter",
+            "1 tbsp honey (optional)"
+          ],
+          instructions: [
+            "Wash and slice apple",
+            "Spread peanut butter on apple slices",
+            "Drizzle with honey if desired",
+            "Serve immediately"
+          ],
+          tips: "Use natural peanut butter without added sugar. Try almond butter for variety."
         },
         {
           name: "Greek Yogurt with Honey",
+          cuisine: "Healthy",
+          mealType: "snack",
           cookTime: "1 minute",
           nutrition: "Protein, probiotics, natural sweetness",
           calories: 150,
           protein: "15g",
           carbs: "18g",
           fat: "4g",
-          cuisine: "Healthy"
+          ingredients: [
+            "1 cup Greek yogurt",
+            "1 tbsp honey",
+            "1/4 cup granola (optional)"
+          ],
+          instructions: [
+            "Scoop yogurt into a bowl",
+            "Drizzle with honey",
+            "Top with granola if desired",
+            "Serve immediately"
+          ],
+          tips: "Use full-fat Greek yogurt for creamier texture. Add fresh fruit for extra nutrition."
         },
         {
           name: "Mixed Nuts (30g)",
+          cuisine: "Healthy",
+          mealType: "snack",
           cookTime: "0 minutes",
           nutrition: "Healthy fats, protein, minerals",
           calories: 180,
           protein: "6g",
           carbs: "8g",
           fat: "16g",
-          cuisine: "Healthy"
-        },
-        {
-          name: "Dark Chocolate (30g)",
-          cookTime: "0 minutes",
-          nutrition: "Antioxidants, magnesium, mood booster",
-          calories: 160,
-          protein: "2g",
-          carbs: "18g",
-          fat: "10g",
-          cuisine: "Healthy"
-        },
-        {
-          name: "Crisps (30g packet)",
-          cookTime: "0 minutes",
-          nutrition: "Quick energy, satisfying crunch",
-          calories: 150,
-          protein: "2g",
-          carbs: "18g",
-          fat: "8g",
-          cuisine: "Snack"
-        },
-        {
-          name: "Dried Fruit Mix",
-          cookTime: "0 minutes",
-          nutrition: "Fiber, vitamins, natural sugars",
-          calories: 120,
-          protein: "2g",
-          carbs: "28g",
-          fat: "0g",
-          cuisine: "Healthy"
-        },
-        {
-          name: "Hummus with Carrots",
-          cookTime: "3 minutes",
-          nutrition: "Protein, fiber, vitamins",
-          calories: 140,
-          protein: "6g",
-          carbs: "20g",
-          fat: "6g",
-          cuisine: "Healthy"
-        },
-        {
-          name: "Protein Bar",
-          cookTime: "0 minutes",
-          nutrition: "Convenient protein, energy",
-          calories: 200,
-          protein: "20g",
-          carbs: "15g",
-          fat: "8g",
-          cuisine: "Healthy"
-        },
-        {
-          name: "Smoothie",
-          cookTime: "5 minutes",
-          nutrition: "Vitamins, minerals, hydration",
-          calories: 180,
-          protein: "8g",
-          carbs: "25g",
-          fat: "4g",
-          cuisine: "Healthy"
-        },
-        {
-          name: "Rice Cakes with Avocado",
-          cookTime: "3 minutes",
-          nutrition: "Low calorie, healthy fats",
-          calories: 120,
-          protein: "3g",
-          carbs: "15g",
-          fat: "6g",
-          cuisine: "Healthy"
+          ingredients: [
+            "30g mixed nuts (almonds, walnuts, cashews)"
+          ],
+          instructions: [
+            "Measure out 30g of mixed nuts",
+            "Serve in a small bowl",
+            "Enjoy as a healthy snack"
+          ],
+          tips: "Choose unsalted nuts for lower sodium. Store in an airtight container."
         },
         // Indulgent Snacks
         {
           name: "Chocolate Bar",
+          cuisine: "Snack",
+          mealType: "snack",
           cookTime: "0 minutes",
           nutrition: "Quick energy, mood boost",
           calories: 240,
           protein: "3g",
           carbs: "25g",
           fat: "14g",
-          cuisine: "Snack"
+          ingredients: [
+            "1 chocolate bar (50g)"
+          ],
+          instructions: [
+            "Unwrap chocolate bar",
+            "Break into pieces",
+            "Enjoy in moderation"
+          ],
+          tips: "Choose dark chocolate for antioxidants. Savor slowly for maximum enjoyment."
         },
         {
-          name: "Ice Cream (100ml)",
+          name: "Crisps (30g packet)",
+          cuisine: "Snack",
+          mealType: "snack",
           cookTime: "0 minutes",
-          nutrition: "Calcium, comfort food",
-          calories: 200,
-          protein: "4g",
-          carbs: "22g",
-          fat: "10g",
-          cuisine: "Snack"
-        },
-        {
-          name: "Chips & Dip",
-          cookTime: "2 minutes",
-          nutrition: "Satisfying, social snack",
-          calories: 280,
-          protein: "4g",
-          carbs: "25g",
-          fat: "18g",
-          cuisine: "Snack"
-        },
-        {
-          name: "Popcorn",
-          cookTime: "5 minutes",
-          nutrition: "Fiber, low calorie volume",
-          calories: 120,
-          protein: "3g",
-          carbs: "20g",
-          fat: "4g",
-          cuisine: "Snack"
-        },
-        {
-          name: "Biscuits (3 pieces)",
-          cookTime: "0 minutes",
-          nutrition: "Quick energy, comfort",
-          calories: 180,
-          protein: "3g",
-          carbs: "25g",
+          nutrition: "Quick energy, satisfying crunch",
+          calories: 150,
+          protein: "2g",
+          carbs: "18g",
           fat: "8g",
-          cuisine: "Snack"
+          ingredients: [
+            "1 packet crisps (30g)"
+          ],
+          instructions: [
+            "Open packet of crisps",
+            "Pour into bowl or eat from packet",
+            "Enjoy as a snack"
+          ],
+          tips: "Choose baked crisps for lower fat content. Pair with hummus for protein."
         }
       ]
     },
@@ -723,119 +498,85 @@ const MealSidebar = () => {
       meals: [
         {
           name: "Fish & Chips",
+          cuisine: "British",
+          mealType: "dinner",
           cookTime: "20 minutes",
           nutrition: "Protein, carbs, traditional British",
           calories: 850,
           protein: "35g",
           carbs: "80g",
           fat: "45g",
-          cuisine: "British"
+          ingredients: [
+            "1 cod fillet",
+            "1 cup flour",
+            "1 cup beer",
+            "2 large potatoes",
+            "Vegetable oil for frying",
+            "Salt and vinegar"
+          ],
+          instructions: [
+            "Cut potatoes into chips and soak in cold water",
+            "Mix flour and beer to make batter",
+            "Heat oil to 375°F (190°C)",
+            "Dip fish in batter and fry for 4-5 minutes",
+            "Fry chips until golden and crispy",
+            "Serve with salt and vinegar"
+          ],
+          tips: "Use a deep fryer for best results. Drain on paper towels to remove excess oil."
         },
         {
           name: "Burger & Fries",
+          cuisine: "American",
+          mealType: "dinner",
           cookTime: "15 minutes",
           nutrition: "Protein, carbs, satisfying meal",
           calories: 750,
           protein: "30g",
           carbs: "65g",
           fat: "35g",
-          cuisine: "American"
-        },
-        {
-          name: "Sushi Roll Set",
-          cookTime: "10 minutes",
-          nutrition: "Lean protein, omega-3, low-fat",
-          calories: 320,
-          protein: "18g",
-          carbs: "45g",
-          fat: "8g",
-          cuisine: "Japanese"
-        },
-        {
-          name: "Indian Curry",
-          cookTime: "25 minutes",
-          nutrition: "Spices, protein, fiber, antioxidants",
-          calories: 480,
-          protein: "22g",
-          carbs: "55g",
-          fat: "18g",
-          cuisine: "Indian"
-        },
-        {
-          name: "Pizza (Takeaway)",
-          cookTime: "45 minutes",
-          nutrition: "Quick, satisfying, social meal",
-          calories: 600,
-          protein: "25g",
-          carbs: "70g",
-          fat: "25g",
-          cuisine: "Italian"
-        },
-        {
-          name: "Kebab",
-          cookTime: "8 minutes",
-          nutrition: "Protein, vegetables, late night food",
-          calories: 450,
-          protein: "25g",
-          carbs: "35g",
-          fat: "20g",
-          cuisine: "Middle Eastern"
-        },
-        {
-          name: "Noodles (Chinese Takeaway)",
-          cookTime: "12 minutes",
-          nutrition: "Carbs, protein, vegetables",
-          calories: 380,
-          protein: "15g",
-          carbs: "45g",
-          fat: "12g",
-          cuisine: "Chinese"
-        },
-        {
-          name: "Thai Green Curry",
-          cookTime: "20 minutes",
-          nutrition: "Spices, protein, coconut milk",
-          calories: 420,
-          protein: "20g",
-          carbs: "40g",
-          fat: "18g",
-          cuisine: "Thai"
-        },
-        {
-          name: "Mexican Burrito",
-          cookTime: "15 minutes",
-          nutrition: "Protein, fiber, Mexican flavors",
-          calories: 520,
-          protein: "25g",
-          carbs: "55g",
-          fat: "20g",
-          cuisine: "Mexican"
-        },
-        {
-          name: "Korean BBQ",
-          cookTime: "30 minutes",
-          nutrition: "Protein, vegetables, grilled flavors",
-          calories: 480,
-          protein: "30g",
-          carbs: "25g",
-          fat: "22g",
-          cuisine: "Korean"
+          ingredients: [
+            "1 beef patty",
+            "1 burger bun",
+            "1 slice cheese",
+            "Lettuce and tomato",
+            "French fries",
+            "Ketchup and mustard"
+          ],
+          instructions: [
+            "Grill beef patty to desired doneness",
+            "Toast burger bun",
+            "Add cheese to patty and let melt",
+            "Assemble burger with lettuce and tomato",
+            "Serve with fries and condiments"
+          ],
+          tips: "Use 80/20 ground beef for juicier burgers. Let patty rest before serving."
         }
       ]
     }
   };
 
-  // Search functionality
+  // Search and filter functionality
   const filteredMeals = useMemo(() => {
-    if (!searchTerm) return mealCategories;
+    let filtered = {};
     
-    const filtered = {};
     Object.entries(mealCategories).forEach(([key, category]) => {
-      const filteredMeals = category.meals.filter(meal =>
-        meal.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        meal.cuisine.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        meal.nutrition.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      const filteredMeals = category.meals.filter(meal => {
+        const matchesSearch = !searchTerm || 
+          meal.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          meal.cuisine.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          meal.nutrition.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          meal.ingredients.some(ingredient => 
+            ingredient.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+        
+        const matchesCuisine = selectedCuisine === 'all' || 
+          meal.cuisine === selectedCuisine;
+        
+        const matchesMealType = selectedMealType === 'all' || 
+          meal.mealType === selectedMealType;
+        
+        return matchesSearch && matchesCuisine && matchesMealType;
+      });
       
       if (filteredMeals.length > 0) {
         filtered[key] = {
@@ -846,7 +587,7 @@ const MealSidebar = () => {
     });
     
     return filtered;
-  }, [searchTerm]);
+  }, [searchTerm, selectedCuisine, selectedMealType]);
 
   const handleMealDrag = (e, meal) => {
     e.dataTransfer.setData('text/plain', JSON.stringify(meal));
@@ -855,6 +596,10 @@ const MealSidebar = () => {
   const handleCustomMeal = (customMeal) => {
     toast.success('Custom meal added!');
     setShowCustomForm(false);
+  };
+
+  const toggleMealExpansion = (mealId) => {
+    setExpandedMeal(expandedMeal === mealId ? null : mealId);
   };
 
   return (
@@ -890,9 +635,42 @@ const MealSidebar = () => {
             onClick={() => setSearchTerm('')}
             className="clear-search-btn"
           >
-            ✕
+            X
           </button>
         )}
+      </div>
+
+      {/* Filter Controls */}
+      <div className="filter-controls">
+        <div className="filter-group">
+          <label>Cuisine:</label>
+          <select
+            value={selectedCuisine}
+            onChange={(e) => setSelectedCuisine(e.target.value)}
+            className="filter-select"
+          >
+            {cuisines.map(cuisine => (
+              <option key={cuisine.value} value={cuisine.value}>
+                {cuisine.label}
+              </option>
+            ))}
+          </select>
+        </div>
+        
+        <div className="filter-group">
+          <label>Meal Type:</label>
+          <select
+            value={selectedMealType}
+            onChange={(e) => setSelectedMealType(e.target.value)}
+            className="filter-select"
+          >
+            {mealTypes.map(type => (
+              <option key={type.value} value={type.value}>
+                {type.label}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div className="meal-categories">
@@ -900,25 +678,77 @@ const MealSidebar = () => {
           <div key={key} className="meal-category">
             <h4 className="category-title">{category.name}</h4>
             <div className="meals-list">
-              {category.meals.map((meal, index) => (
-                <motion.div
-                  key={index}
-                  className="meal-item"
-                  draggable
-                  onDragStart={(e) => handleMealDrag(e, meal)}
-                  onMouseEnter={() => setHoveredMeal(meal)}
-                  onMouseLeave={() => setHoveredMeal(null)}
-                  onTouchStart={() => setHoveredMeal(meal)}
-                  onTouchEnd={() => setHoveredMeal(null)}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <div className="meal-name">{meal.name}</div>
-                  <div className="meal-cuisine">{meal.cuisine}</div>
-                  <div className="meal-cook-time">⏱️ {meal.cookTime}</div>
-                  <div className="meal-calories">{meal.calories} cal</div>
-                </motion.div>
-              ))}
+              {category.meals.map((meal, index) => {
+                const mealId = `${key}-${index}`;
+                const isExpanded = expandedMeal === mealId;
+                
+                return (
+                  <motion.div
+                    key={index}
+                    className="meal-item"
+                    draggable
+                    onDragStart={(e) => handleMealDrag(e, meal)}
+                    onMouseEnter={() => setHoveredMeal(meal)}
+                    onMouseLeave={() => setHoveredMeal(null)}
+                    onTouchStart={() => setHoveredMeal(meal)}
+                    onTouchEnd={() => setHoveredMeal(null)}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <div className="meal-header">
+                      <div className="meal-name">{meal.name}</div>
+                      <div className="meal-cuisine">{meal.cuisine}</div>
+                      <div className="meal-cook-time">Time: {meal.cookTime}</div>
+                      <div className="meal-calories">{meal.calories} cal</div>
+                    </div>
+                    
+                    <div className="meal-actions">
+                      <button
+                        className="recipe-toggle-btn"
+                        onClick={() => toggleMealExpansion(mealId)}
+                      >
+                        {isExpanded ? 'Hide Recipe' : 'Show Recipe'}
+                      </button>
+                    </div>
+
+                    {/* Expanded Recipe Details */}
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.div
+                          className="recipe-details"
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <div className="recipe-section">
+                            <h5>Ingredients:</h5>
+                            <ul className="ingredients-list">
+                              {meal.ingredients.map((ingredient, idx) => (
+                                <li key={idx}>{ingredient}</li>
+                              ))}
+                            </ul>
+                          </div>
+                          
+                          <div className="recipe-section">
+                            <h5>Instructions:</h5>
+                            <ol className="instructions-list">
+                              {meal.instructions.map((instruction, idx) => (
+                                <li key={idx}>{instruction}</li>
+                              ))}
+                            </ol>
+                          </div>
+                          
+                          <div className="recipe-section">
+                            <h5>Tips:</h5>
+                            <p className="recipe-tips">{meal.tips}</p>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         ))}
@@ -961,6 +791,10 @@ const MealSidebar = () => {
                 <span className="nutrition-value">{hoveredMeal.fat}</span>
               </div>
             </div>
+            <div className="tooltip-section">
+              <strong>Quick Preview:</strong>
+              <p>{hoveredMeal.ingredients.slice(0, 3).join(', ')}...</p>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -983,12 +817,16 @@ const CustomMealForm = ({ onSubmit, onClose }) => {
   const [formData, setFormData] = useState({
     name: '',
     cuisine: '',
+    mealType: '',
     cookTime: '',
     nutrition: '',
     calories: '',
     protein: '',
     carbs: '',
-    fat: ''
+    fat: '',
+    ingredients: '',
+    instructions: '',
+    tips: ''
   });
 
   const handleSubmit = (e) => {
@@ -1026,27 +864,43 @@ const CustomMealForm = ({ onSubmit, onClose }) => {
             />
           </div>
           
-          <div className="form-group">
-            <label>Cuisine</label>
-            <select
-              value={formData.cuisine}
-              onChange={(e) => setFormData({...formData, cuisine: e.target.value})}
-            >
-              <option value="">Select Cuisine</option>
-              <option value="Western">Western</option>
-              <option value="Chinese">Chinese</option>
-              <option value="Indian">Indian</option>
-              <option value="Italian">Italian</option>
-              <option value="Japanese">Japanese</option>
-              <option value="Thai">Thai</option>
-              <option value="Mexican">Mexican</option>
-              <option value="Korean">Korean</option>
-              <option value="Middle Eastern">Middle Eastern</option>
-              <option value="British">British</option>
-              <option value="American">American</option>
-              <option value="Healthy">Healthy</option>
-              <option value="Snack">Snack</option>
-            </select>
+          <div className="form-row">
+            <div className="form-group">
+              <label>Cuisine</label>
+              <select
+                value={formData.cuisine}
+                onChange={(e) => setFormData({...formData, cuisine: e.target.value})}
+              >
+                <option value="">Select Cuisine</option>
+                <option value="Western">Western</option>
+                <option value="Chinese">Chinese</option>
+                <option value="Indian">Indian</option>
+                <option value="Italian">Italian</option>
+                <option value="Japanese">Japanese</option>
+                <option value="Thai">Thai</option>
+                <option value="Mexican">Mexican</option>
+                <option value="Korean">Korean</option>
+                <option value="Middle Eastern">Middle Eastern</option>
+                <option value="British">British</option>
+                <option value="American">American</option>
+                <option value="Healthy">Healthy</option>
+                <option value="Snack">Snack</option>
+              </select>
+            </div>
+            
+            <div className="form-group">
+              <label>Meal Type</label>
+              <select
+                value={formData.mealType}
+                onChange={(e) => setFormData({...formData, mealType: e.target.value})}
+              >
+                <option value="">Select Type</option>
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+                <option value="snack">Snack</option>
+              </select>
+            </div>
           </div>
           
           <div className="form-group">
@@ -1113,6 +967,36 @@ const CustomMealForm = ({ onSubmit, onClose }) => {
                 />
               </div>
             </div>
+          </div>
+          
+          <div className="form-group">
+            <label>Ingredients (one per line)</label>
+            <textarea
+              value={formData.ingredients}
+              onChange={(e) => setFormData({...formData, ingredients: e.target.value})}
+              placeholder="1 cup flour&#10;2 eggs&#10;1/2 cup milk"
+              rows="5"
+            />
+          </div>
+          
+          <div className="form-group">
+            <label>Instructions (one per line)</label>
+            <textarea
+              value={formData.instructions}
+              onChange={(e) => setFormData({...formData, instructions: e.target.value})}
+              placeholder="Mix flour and eggs&#10;Add milk gradually&#10;Cook for 10 minutes"
+              rows="5"
+            />
+          </div>
+          
+          <div className="form-group">
+            <label>Cooking Tips</label>
+            <textarea
+              value={formData.tips}
+              onChange={(e) => setFormData({...formData, tips: e.target.value})}
+              placeholder="Share any helpful cooking tips"
+              rows="3"
+            />
           </div>
           
           <div className="form-actions">
