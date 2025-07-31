@@ -4,7 +4,7 @@ import { toast } from 'react-hot-toast';
 import FastNutritionService from '../services/fastNutrition.js';
 import './MealSidebar.css';
 
-const MealSidebar = () => {
+const MealSidebar = ({ onMealSelect, selectedMeal }) => {
   const [showCustomForm, setShowCustomForm] = useState(false);
   const [hoveredMeal, setHoveredMeal] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -85,6 +85,9 @@ const MealSidebar = () => {
   const handleCustomMeal = (customMeal) => {
     toast.success('Custom meal added!');
     setShowCustomForm(false);
+    if (onMealSelect) {
+      onMealSelect(customMeal);
+    }
   };
 
   const toggleMealExpansion = (mealId) => {
@@ -98,6 +101,11 @@ const MealSidebar = () => {
       if (nutrition) {
         toast.success(`${mealName}: ${nutrition.calories} calories, ${nutrition.protein}g protein`);
         setExpandedMeal(expandedMeal === mealName ? null : mealName);
+        
+        // Call the parent component's meal select handler
+        if (onMealSelect) {
+          onMealSelect(nutrition);
+        }
       }
     } catch (error) {
       toast.error('Could not get nutrition info');
@@ -142,7 +150,7 @@ const MealSidebar = () => {
             }}
             className="clear-search-btn"
           >
-            X
+            ×
           </button>
         )}
         
@@ -200,80 +208,92 @@ const MealSidebar = () => {
 
       {/* Meals List */}
       <div className="meals-list">
-        {filteredMeals.map((mealName, index) => {
-          const mealData = FastNutritionService.fuzzySearch(mealName);
-          return (
-            <motion.div
-              key={index}
-              className="meal-item"
-              draggable
-              onDragStart={(e) => handleMealDrag(e, mealName)}
-              onClick={() => handleMealClick(mealName)}
-              onMouseEnter={() => setHoveredMeal(mealName)}
-              onMouseLeave={() => setHoveredMeal(null)}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <div className="meal-header">
-                <h4>{mealName}</h4>
-                {mealData && (
-                  <span className="meal-calories">{mealData.calories} cal</span>
-                )}
-              </div>
-              
-              {mealData && (
-                <div className="meal-details">
-                  <div className="nutrition-brief">
-                    <span>P: {mealData.protein}g</span>
-                    <span>C: {mealData.carbs}g</span>
-                    <span>F: {mealData.fat}g</span>
-                  </div>
-                  
-                  {expandedMeal === mealName && (
-                    <motion.div
-                      className="meal-expanded"
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                    >
-                      <div className="nutrition-details">
-                        <div className="macro-breakdown">
-                          <div className="macro-item">
-                            <span className="macro-label">Protein</span>
-                            <span className="macro-value">{mealData.protein}g</span>
-                          </div>
-                          <div className="macro-item">
-                            <span className="macro-label">Carbs</span>
-                            <span className="macro-value">{mealData.carbs}g</span>
-                          </div>
-                          <div className="macro-item">
-                            <span className="macro-label">Fat</span>
-                            <span className="macro-value">{mealData.fat}g</span>
-                          </div>
-                          <div className="macro-item">
-                            <span className="macro-label">Fiber</span>
-                            <span className="macro-value">{mealData.fiber}g</span>
-                          </div>
-                        </div>
-                        
-                        <div className="meal-info">
-                          <p><strong>Cook Time:</strong> {mealData.cookTime}</p>
-                          <p><strong>Nutrition:</strong> {mealData.nutrition}</p>
-                        </div>
-                        
-                        {mealData.tips && (
-                          <div className="meal-tips">
-                            <p><strong>Tips:</strong> {mealData.tips}</p>
-                          </div>
-                        )}
-                      </div>
-                    </motion.div>
+        {filteredMeals.length === 0 ? (
+          <div className="no-results">
+            <p>No meals found matching your criteria.</p>
+            <p>Try adjusting your search or filters.</p>
+          </div>
+        ) : (
+          filteredMeals.map((mealName, index) => {
+            const mealData = FastNutritionService.fuzzySearch(mealName);
+            const isSelected = selectedMeal && selectedMeal.name === mealName;
+            
+            return (
+              <motion.div
+                key={index}
+                className={`meal-item ${isSelected ? 'selected' : ''}`}
+                draggable
+                onDragStart={(e) => handleMealDrag(e, mealName)}
+                onClick={() => handleMealClick(mealName)}
+                onMouseEnter={() => setHoveredMeal(mealName)}
+                onMouseLeave={() => setHoveredMeal(null)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+              >
+                <div className="meal-header">
+                  <h4>{mealName}</h4>
+                  {mealData && (
+                    <span className="meal-calories">{mealData.calories} cal</span>
                   )}
                 </div>
-              )}
-            </motion.div>
-          );
-        })}
+                
+                {mealData && (
+                  <div className="meal-details">
+                    <div className="nutrition-brief">
+                      <span>P: {mealData.protein}g</span>
+                      <span>C: {mealData.carbs}g</span>
+                      <span>F: {mealData.fat}g</span>
+                    </div>
+                    
+                    {expandedMeal === mealName && (
+                      <motion.div
+                        className="meal-expanded"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                      >
+                        <div className="nutrition-details">
+                          <div className="macro-breakdown">
+                            <div className="macro-item">
+                              <span className="macro-label">Protein</span>
+                              <span className="macro-value">{mealData.protein}g</span>
+                            </div>
+                            <div className="macro-item">
+                              <span className="macro-label">Carbs</span>
+                              <span className="macro-value">{mealData.carbs}g</span>
+                            </div>
+                            <div className="macro-item">
+                              <span className="macro-label">Fat</span>
+                              <span className="macro-value">{mealData.fat}g</span>
+                            </div>
+                            <div className="macro-item">
+                              <span className="macro-label">Fiber</span>
+                              <span className="macro-value">{mealData.fiber}g</span>
+                            </div>
+                          </div>
+                          
+                          <div className="meal-info">
+                            <p><strong>Cook Time:</strong> {mealData.cookTime}</p>
+                            <p><strong>Nutrition:</strong> {mealData.nutrition}</p>
+                          </div>
+                          
+                          {mealData.tips && (
+                            <div className="meal-tips">
+                              <p><strong>Tips:</strong> {mealData.tips}</p>
+                            </div>
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
+                  </div>
+                )}
+              </motion.div>
+            );
+          })
+        )}
       </div>
 
       {/* Custom Meal Form */}
