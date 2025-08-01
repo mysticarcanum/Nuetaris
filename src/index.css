@@ -20,7 +20,7 @@ html, body {
 /* Aurora Background */
 .app {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f4f1eb 0%, #fff5e6 50%, #ffe8cc 100%);
+  background: linear-gradient(135deg, #f4f1eb 0%, #fff5e6 25%, #ffe8cc 50%, #ffdab9 75%, #ffcc99 100%);
   position: relative;
   overflow-x: hidden;
 }
@@ -30,12 +30,12 @@ html, body {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100%;
+  height: 100%;
   background: 
-    radial-gradient(circle at 20% 80%, rgba(255, 140, 0, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(255, 165, 0, 0.05) 0%, transparent 50%);
+    radial-gradient(circle at 20% 80%, rgba(255, 140, 0, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 165, 0, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(255, 200, 0, 0.08) 0%, transparent 50%);
   pointer-events: none;
   z-index: 1;
 }
@@ -51,7 +51,7 @@ html, body {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255, 140, 0, 0.2);
-  padding: 16px 0;
+  padding: 1rem 0;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -59,186 +59,200 @@ html, body {
 }
 
 .header-content {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.welcome-section {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.welcome-message {
-  font-family: 'Manrope', sans-serif;
-  font-weight: 700;
-  font-size: 24px;
+.welcome-section h1 {
+  font-size: 2.5rem;
+  font-weight: 300;
   color: #333;
   margin: 0;
-  background: linear-gradient(135deg, #ff8c00, #ff6b35);
+  background: linear-gradient(135deg, #ff8c00, #ffa500);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
+.header-actions {
+  display: flex;
+  gap: 1rem;
+}
+
 .switch-profile-btn {
-  background: linear-gradient(135deg, #ff8c00, #ff6b35);
-  color: white;
-  border: none;
+  background: rgba(255, 140, 0, 0.1);
+  border: 1px solid rgba(255, 140, 0, 0.3);
+  color: #ff8c00;
+  padding: 0.75rem 1.5rem;
   border-radius: 12px;
-  padding: 10px 20px;
-  font-family: 'Manrope', sans-serif;
   font-weight: 500;
-  font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .switch-profile-btn:hover {
+  background: rgba(255, 140, 0, 0.2);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255, 140, 0, 0.4);
+  box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
 }
 
 /* Main Content */
 .main-content {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 24px;
-  min-height: calc(100vh - 80px);
+  padding: 2rem;
 }
 
 .container {
   width: 100%;
 }
 
-/* Daily Summary Section */
-.daily-summary {
+/* Welcome Section */
+.welcome-section {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 140, 0, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-message {
+  font-size: 3rem;
+  font-weight: 300;
+  color: #333;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #ff8c00, #ffa500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Nutrition Summary */
+.nutrition-summary {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-radius: 20px;
-  padding: 24px;
-  margin-bottom: 24px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  margin-bottom: 2rem;
   border: 1px solid rgba(255, 140, 0, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
-.daily-summary h3 {
-  font-family: 'Manrope', sans-serif;
+.nutrition-summary h3 {
+  font-size: 1.5rem;
   font-weight: 600;
-  font-size: 20px;
   color: #333;
-  margin: 0 0 20px 0;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
-.nutrition-summary,
-.workout-summary {
-  margin-bottom: 20px;
-}
-
-.nutrition-summary h4,
-.workout-summary h4 {
-  font-family: 'Manrope', sans-serif;
-  font-weight: 600;
-  font-size: 16px;
-  color: #333;
-  margin: 0 0 12px 0;
-}
-
-.nutrition-stats,
-.workout-stats {
+.nutrition-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 12px;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
-.nutrition-stat,
-.workout-stat {
-  background: rgba(255, 140, 0, 0.05);
+.nutrition-stat {
+  background: rgba(255, 140, 0, 0.1);
   border-radius: 12px;
-  padding: 12px;
-  border: 1px solid rgba(255, 140, 0, 0.1);
+  padding: 1rem;
   text-align: center;
+  border: 1px solid rgba(255, 140, 0, 0.2);
 }
 
 .stat-label {
   display: block;
-  font-family: 'Manrope', sans-serif;
-  font-size: 12px;
+  font-size: 0.875rem;
   font-weight: 500;
   color: #666;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 4px;
+  margin-bottom: 0.5rem;
 }
 
 .stat-value {
   display: block;
-  font-family: 'Manrope', sans-serif;
-  font-size: 18px;
+  font-size: 1.25rem;
   font-weight: 700;
   color: #ff8c00;
 }
 
-.stat-value.negative {
-  color: #f44336;
-}
-
-.stat-value.positive {
-  color: #4caf50;
-}
-
-.reset-buttons {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
-}
-
-.reset-btn {
-  background: rgba(255, 255, 255, 0.8);
-  color: #666;
-  border: 2px solid rgba(255, 140, 0, 0.2);
+.reset-nutrition-btn {
+  background: linear-gradient(135deg, #ff8c00, #ffa500);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
   border-radius: 12px;
-  padding: 8px 16px;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 500;
-  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  display: block;
+  margin: 0 auto;
 }
 
-.reset-btn:hover {
-  background: rgba(255, 140, 0, 0.1);
-  border-color: rgba(255, 140, 0, 0.3);
-  color: #ff8c00;
+.reset-nutrition-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 140, 0, 0.4);
 }
 
-/* Main Layout - Three Column Design */
+/* Main Layout */
 .main-layout {
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
-  gap: 24px;
-  margin-bottom: 24px;
-  min-height: 600px;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  min-height: calc(100vh - 400px);
 }
 
+/* Sidebars */
 .left-sidebar,
 .right-sidebar {
   display: flex;
   flex-direction: column;
 }
 
+/* Sidebar Controls */
+.sidebar-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.sidebar-toggle {
+  background: rgba(255, 140, 0, 0.1);
+  border: 1px solid rgba(255, 140, 0, 0.3);
+  color: #ff8c00;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.sidebar-toggle:hover,
+.sidebar-toggle.active {
+  background: rgba(255, 140, 0, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+}
+
+/* Center Content */
 .center-content {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-radius: 20px;
-  padding: 24px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
   border: 1px solid rgba(255, 140, 0, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   min-height: 600px;
 }
 
@@ -247,248 +261,103 @@ html, body {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-radius: 20px;
-  padding: 24px;
-  margin-bottom: 24px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  margin-top: 2rem;
   border: 1px solid rgba(255, 140, 0, 0.2);
-}
-
-.selected-items-details h3 {
-  font-family: 'Manrope', sans-serif;
-  font-weight: 600;
-  font-size: 20px;
-  color: #333;
-  margin: 0 0 20px 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 
 .selected-meal-details,
 .selected-workout-details {
-  margin-bottom: 24px;
+  margin-bottom: 2rem;
 }
 
 .selected-meal-details h3,
 .selected-workout-details h3 {
-  font-family: 'Manrope', sans-serif;
+  font-size: 1.5rem;
   font-weight: 600;
-  font-size: 18px;
   color: #333;
-  margin: 0 0 16px 0;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(135deg, #ff8c00, #ffa500);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .meal-details-grid,
 .workout-details-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
 }
 
 .meal-nutrition,
-.meal-ingredients,
-.meal-instructions,
-.workout-info,
-.workout-benefits,
-.workout-instructions,
-.workout-tips {
-  background: rgba(255, 255, 255, 0.8);
+.workout-info {
+  background: rgba(255, 140, 0, 0.1);
   border-radius: 12px;
-  padding: 16px;
-  border: 1px solid rgba(255, 140, 0, 0.1);
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 140, 0, 0.2);
 }
 
 .meal-nutrition h4,
+.workout-info h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.nutrition-grid,
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.nutrition-grid span,
+.info-grid span {
+  font-size: 0.875rem;
+  color: #666;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.meal-ingredients,
+.meal-instructions,
+.workout-benefits,
+.workout-instructions {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 140, 0, 0.1);
+}
+
 .meal-ingredients h4,
 .meal-instructions h4,
-.workout-info h4,
 .workout-benefits h4,
-.workout-instructions h4,
-.workout-tips h4 {
-  font-family: 'Manrope', sans-serif;
+.workout-instructions h4 {
+  font-size: 1.125rem;
   font-weight: 600;
-  font-size: 14px;
   color: #333;
-  margin: 0 0 12px 0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.nutrition-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-}
-
-.nutrition-grid span {
-  font-family: 'Manrope', sans-serif;
-  font-size: 12px;
-  color: #666;
-  padding: 4px 8px;
-  background: rgba(255, 140, 0, 0.05);
-  border-radius: 6px;
-  text-align: center;
-}
-
-.workout-meta {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-}
-
-.workout-meta span {
-  font-family: 'Manrope', sans-serif;
-  font-size: 12px;
-  color: #666;
-  padding: 4px 8px;
-  background: rgba(255, 140, 0, 0.05);
-  border-radius: 6px;
-  text-align: center;
+  margin-bottom: 1rem;
 }
 
 .meal-ingredients ul,
 .meal-instructions ol,
 .workout-benefits ul,
 .workout-instructions ol {
-  margin: 0;
-  padding-left: 16px;
+  padding-left: 1.5rem;
 }
 
 .meal-ingredients li,
 .meal-instructions li,
 .workout-benefits li,
 .workout-instructions li {
-  font-family: 'Manrope', sans-serif;
-  font-size: 12px;
-  color: #666;
-  margin-bottom: 6px;
-  line-height: 1.4;
-}
-
-.workout-tips p {
-  font-family: 'Manrope', sans-serif;
-  font-size: 12px;
-  color: #666;
-  margin: 0;
-  line-height: 1.4;
-  font-style: italic;
-}
-
-/* Daily Workouts List */
-.daily-workouts-list {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: 20px;
-  padding: 24px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 140, 0, 0.2);
-}
-
-.daily-workouts-list h3 {
-  font-family: 'Manrope', sans-serif;
-  font-weight: 600;
-  font-size: 20px;
-  color: #333;
-  margin: 0 0 20px 0;
-}
-
-.workouts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
-}
-
-.workout-item {
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 16px;
-  padding: 16px;
-  border: 2px solid rgba(255, 140, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.workout-item:hover {
-  border-color: rgba(255, 140, 0, 0.3);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(255, 140, 0, 0.15);
-}
-
-.workout-item.completed {
-  border-color: #4caf50;
-  background: rgba(76, 175, 80, 0.05);
-}
-
-.workout-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 8px;
-}
-
-.workout-header h4 {
-  font-family: 'Manrope', sans-serif;
-  font-weight: 600;
-  font-size: 16px;
-  color: #333;
-  margin: 0;
-  flex: 1;
-  margin-right: 12px;
-}
-
-.workout-time {
-  background: linear-gradient(135deg, #ff8c00, #ff6b35);
-  color: white;
-  padding: 4px 8px;
-  border-radius: 8px;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 500;
-  font-size: 12px;
-  white-space: nowrap;
-}
-
-.workout-meta {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-  flex-wrap: wrap;
-}
-
-.workout-meta span {
-  font-family: 'Manrope', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  color: #666;
-  background: rgba(255, 140, 0, 0.1);
-  padding: 2px 6px;
-  border-radius: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.completion-btn {
-  width: 100%;
-  background: rgba(255, 255, 255, 0.8);
-  color: #666;
-  border: 2px solid rgba(255, 140, 0, 0.2);
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 500;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.completion-btn:hover {
-  background: rgba(255, 140, 0, 0.1);
-  border-color: rgba(255, 140, 0, 0.3);
-  color: #ff8c00;
-}
-
-.completion-btn.completed {
-  background: rgba(76, 175, 80, 0.1);
-  border-color: #4caf50;
-  color: #4caf50;
-}
-
-.completion-btn.completed:hover {
-  background: rgba(76, 175, 80, 0.2);
+  margin-bottom: 0.5rem;
+  color: #555;
+  line-height: 1.6;
 }
 
 /* iOS-Style Animations */
@@ -528,58 +397,36 @@ html, body {
 /* Responsive Design */
 @media (max-width: 1200px) {
   .main-layout {
-    grid-template-columns: 1fr 1.5fr 1fr;
-    gap: 16px;
+    grid-template-columns: 1fr 2fr;
   }
   
-  .header-content {
-    padding: 0 16px;
-  }
-  
-  .main-content {
-    padding: 16px;
+  .right-sidebar {
+    grid-column: 1 / -1;
+    grid-row: 2;
   }
 }
 
 @media (max-width: 768px) {
   .main-layout {
     grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  
-  .left-sidebar,
-  .right-sidebar {
-    order: 2;
-  }
-  
-  .center-content {
-    order: 1;
-    min-height: 400px;
+    gap: 1rem;
   }
   
   .header-content {
+    padding: 0 1rem;
     flex-direction: column;
-    gap: 12px;
-    align-items: flex-start;
-  }
-  
-  .welcome-section {
-    flex-direction: column;
-    gap: 12px;
-    align-items: flex-start;
+    gap: 1rem;
   }
   
   .welcome-message {
-    font-size: 20px;
+    font-size: 2rem;
   }
   
-  .daily-summary {
-    padding: 16px;
-    margin-bottom: 16px;
+  .main-content {
+    padding: 1rem;
   }
   
-  .nutrition-stats,
-  .workout-stats {
+  .nutrition-stats {
     grid-template-columns: repeat(2, 1fr);
   }
   
@@ -588,72 +435,33 @@ html, body {
     grid-template-columns: 1fr;
   }
   
-  .workouts-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .reset-buttons {
+  .sidebar-controls {
     flex-direction: column;
-  }
-  
-  .selected-items-details {
-    padding: 16px;
-    margin-bottom: 16px;
-  }
-  
-  .daily-workouts-list {
-    padding: 16px;
+    align-items: center;
   }
 }
 
 @media (max-width: 480px) {
-  .header {
-    padding: 12px 0;
-  }
-  
-  .main-content {
-    padding: 12px;
-  }
-  
-  .daily-summary,
-  .center-content,
-  .selected-items-details,
-  .daily-workouts-list {
-    padding: 16px;
-    border-radius: 16px;
-  }
-  
-  .nutrition-stats,
-  .workout-stats {
+  .nutrition-stats {
     grid-template-columns: 1fr;
   }
   
-  .nutrition-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .workout-meta {
-    grid-template-columns: 1fr;
+  .header-content {
+    text-align: center;
   }
   
   .welcome-message {
-    font-size: 18px;
-  }
-  
-  .switch-profile-btn {
-    padding: 8px 16px;
-    font-size: 12px;
+    font-size: 1.5rem;
   }
 }
 
 /* iOS-Style Scrollbars */
 ::-webkit-scrollbar {
   width: 8px;
-  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 140, 0, 0.1);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
 }
 
@@ -666,7 +474,7 @@ html, body {
   background: rgba(255, 140, 0, 0.5);
 }
 
-/* Loading States */
+/* Loading states */
 .loading {
   opacity: 0.6;
   pointer-events: none;
@@ -677,9 +485,9 @@ html, body {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
   width: 20px;
   height: 20px;
+  margin: -10px 0 0 -10px;
   border: 2px solid rgba(255, 140, 0, 0.3);
   border-top: 2px solid #ff8c00;
   border-radius: 50%;
@@ -687,140 +495,35 @@ html, body {
 }
 
 @keyframes spin {
-  0% { transform: translate(-50%, -50%) rotate(0deg); }
-  100% { transform: translate(-50%, -50%) rotate(360deg); }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-/* Focus States for Accessibility */
+/* Focus states for accessibility */
 button:focus,
 input:focus,
 select:focus,
 textarea:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.3);
+  outline: 2px solid rgba(255, 140, 0, 0.5);
+  outline-offset: 2px;
 }
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  .app {
-    background: #ffffff;
-  }
-  
-  .header,
-  .daily-summary,
-  .center-content,
-  .selected-items-details,
-  .daily-workouts-list {
-    border: 2px solid #ff8c00;
-  }
-  
-  .welcome-message {
-    color: #ff8c00;
-    -webkit-text-fill-color: #ff8c00;
-  }
+/* Smooth transitions */
+* {
+  transition: all 0.3s ease;
 }
 
-/* Reduced Motion Support */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  
-  .workout-item:hover,
-  .switch-profile-btn:hover {
-    transform: none;
-  }
-}
-
-/* Print Styles */
-@media print {
-  .header,
-  .left-sidebar,
-  .right-sidebar {
-    display: none;
-  }
-  
-  .main-layout {
-    grid-template-columns: 1fr;
-  }
-  
-  .app {
-    background: white;
-  }
-}
-
-/* Dark Mode Support (if needed in future) */
-@media (prefers-color-scheme: dark) {
-  .app {
-    background: #1a1a1a;
-    color: #ffffff;
-  }
-  
-  .header,
-  .daily-summary,
-  .center-content,
-  .selected-items-details,
-  .daily-workouts-list {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 140, 0, 0.3);
-  }
-  
-  .welcome-message {
-    color: #ff8c00;
-    -webkit-text-fill-color: #ff8c00;
-  }
-}
-
-/* Touch Device Optimizations */
+/* Mobile touch improvements */
 @media (hover: none) and (pointer: coarse) {
-  .workout-item:hover,
-  .switch-profile-btn:hover {
-    transform: none;
-  }
-  
-  .completion-btn,
-  .reset-btn {
+  button,
+  .sidebar-toggle,
+  .nutrition-stat {
     min-height: 44px;
   }
   
-  .search-input,
-  .filter-select {
-    min-height: 44px;
-  }
-}
-
-/* Landscape Mobile Optimizations */
-@media (max-width: 768px) and (orientation: landscape) {
-  .header {
-    padding: 8px 0;
-  }
-  
-  .welcome-message {
+  input,
+  select,
+  textarea {
     font-size: 16px;
-  }
-  
-  .main-content {
-    padding: 12px;
-  }
-  
-  .main-layout {
-    gap: 12px;
-  }
-}
-
-/* Ultra-wide Screen Support */
-@media (min-width: 1920px) {
-  .main-content {
-    max-width: 1600px;
-  }
-  
-  .header-content {
-    max-width: 1600px;
-  }
-  
-  .main-layout {
-    grid-template-columns: 1fr 2.5fr 1fr;
   }
 }
