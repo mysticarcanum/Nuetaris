@@ -483,4 +483,62 @@ function App() {
   );
 }
 
+// Add to imports
+import CharacterDisplay from './components/CharacterDisplay';
+import CharacterEditor from './components/CharacterEditor';
+
+// Add to state
+const [showCharacterEditor, setShowCharacterEditor] = useState(false);
+const [currentCharacter, setCurrentCharacter] = useState(null);
+
+// Add after existing useEffect hooks
+useEffect(() => {
+  const savedCharacter = Cookies.get('neutaris_character');
+  if (savedCharacter) {
+    try {
+      setCurrentCharacter(JSON.parse(savedCharacter));
+    } catch (error) {
+      console.error('Error loading saved character:', error);
+    }
+  }
+}, []);
+
+// Add character save handler
+const handleCharacterSave = (updatedCharacter) => {
+  setCurrentCharacter(updatedCharacter);
+  Cookies.set('neutaris_character', JSON.stringify(updatedCharacter), { expires: 365 });
+};
+
+// Add to the return statement, just before closing </div>
+{currentCharacter && (
+  <CharacterDisplay 
+    character={currentCharacter}
+    onCharacterClick={() => console.log('Character clicked')}
+  />
+)}
+
+{showCharacterEditor && (
+  <CharacterEditor
+    character={currentCharacter}
+    onSave={handleCharacterSave}
+    onClose={() => setShowCharacterEditor(false)}
+  />
+)}
+
+{/* Add gear icon to header */}
+<div className="header-actions">
+  <button 
+    className="switch-profile-btn"
+    onClick={handleSwitchProfile}
+  >
+    Switch Profile
+  </button>
+  <button 
+    className="character-edit-btn"
+    onClick={() => setShowCharacterEditor(true)}
+  >
+    ⚙️
+  </button>
+</div>
+
 export default App;
