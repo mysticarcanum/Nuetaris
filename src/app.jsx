@@ -14,6 +14,8 @@ function App() {
   const [showCharacterCreation, setShowCharacterCreation] = useState(false);
   const [profiles, setProfiles] = useState([]);
   const [galleryLink, setGalleryLink] = useState('');
+  const [showMealSidebar, setShowMealSidebar] = useState(true);
+  const [showWorkoutSidebar, setShowWorkoutSidebar] = useState(true);
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [dailyNutrition, setDailyNutrition] = useState({
@@ -23,17 +25,18 @@ function App() {
     fat: 0,
     fiber: 0
   });
-  const [dailyWorkouts, setDailyWorkouts] = useState([]);
-  const [showMealSidebar, setShowMealSidebar] = useState(true);
-  const [showWorkoutSidebar, setShowWorkoutSidebar] = useState(true);
+  const [calendarSchedule, setCalendarSchedule] = useState({});
+  const [currentDate, setCurrentDate] = useState(new Date());
 
-  // Load profiles and settings from cookies on mount
+  // Load all data from cookies on mount
   useEffect(() => {
     const savedProfiles = Cookies.get('neutaris_profiles');
     const savedCurrentProfile = Cookies.get('neutaris_current_profile');
     const savedGalleryLink = Cookies.get('neutaris_gallery_link');
+    const savedShowMealSidebar = Cookies.get('neutaris_show_meal_sidebar');
+    const savedShowWorkoutSidebar = Cookies.get('neutaris_show_workout_sidebar');
     const savedDailyNutrition = Cookies.get('neutaris_daily_nutrition');
-    const savedDailyWorkouts = Cookies.get('neutaris_daily_workouts');
+    const savedCalendarSchedule = Cookies.get('neutaris_calendar_schedule');
 
     if (savedProfiles) {
       try {
@@ -57,6 +60,14 @@ function App() {
       setGalleryLink(savedGalleryLink);
     }
 
+    if (savedShowMealSidebar !== undefined) {
+      setShowMealSidebar(savedShowMealSidebar === 'true');
+    }
+
+    if (savedShowWorkoutSidebar !== undefined) {
+      setShowWorkoutSidebar(savedShowWorkoutSidebar === 'true');
+    }
+
     if (savedDailyNutrition) {
       try {
         setDailyNutrition(JSON.parse(savedDailyNutrition));
@@ -65,11 +76,11 @@ function App() {
       }
     }
 
-    if (savedDailyWorkouts) {
+    if (savedCalendarSchedule) {
       try {
-        setDailyWorkouts(JSON.parse(savedDailyWorkouts));
+        setCalendarSchedule(JSON.parse(savedCalendarSchedule));
       } catch (error) {
-        console.error('Error parsing daily workouts:', error);
+        console.error('Error parsing calendar schedule:', error);
       }
     }
   }, []);
@@ -95,6 +106,15 @@ function App() {
     }
   }, [galleryLink]);
 
+  // Save sidebar visibility preferences
+  useEffect(() => {
+    Cookies.set('neutaris_show_meal_sidebar', showMealSidebar.toString(), { expires: 365 });
+  }, [showMealSidebar]);
+
+  useEffect(() => {
+    Cookies.set('neutaris_show_workout_sidebar', showWorkoutSidebar.toString(), { expires: 365 });
+  }, [showWorkoutSidebar]);
+
   // Save daily nutrition to cookies whenever it changes
   useEffect(() => {
     if (dailyNutrition.calories > 0) {
@@ -102,12 +122,61 @@ function App() {
     }
   }, [dailyNutrition]);
 
-  // Save daily workouts to cookies whenever they change
+  // Save calendar schedule to cookies whenever it changes
   useEffect(() => {
-    if (dailyWorkouts.length > 0) {
-      Cookies.set('neutaris_daily_workouts', JSON.stringify(dailyWorkouts), { expires: 1 });
+    if (Object.keys(calendarSchedule).length > 0) {
+      Cookies.set('neutaris_calendar_schedule', JSON.stringify(calendarSchedule), { expires: 365 });
     }
-  }, [dailyWorkouts]);
+  }, [calendarSchedule]);
+
+  // Handle meal selection from MealSidebar
+  const handleMealSelect = (mealData) => {
+    setSelectedMeal(mealData);
+    
+    // Update daily nutrition totals
+    setDailyNutrition(prev => ({
+      calories: prev.calories + (mealData.calories || 0),
+      protein: prev.protein + (mealData.protein || 0),
+      carbs: prev.carbs + (mealData.carbs || 0),
+      fat: prev.fat + (mealData.fat || 0),
+      fiber: prev.fiber + (mealData.fiber || 0)
+    }));
+  };
+
+  // Handle workout selection from WorkoutSidebar
+  const handleWorkoutSelect = (workoutData) => {
+    setSelectedWorkout(workoutData);
+  };
+
+  // Handle drag and drop to calendar
+  const handleCalendarDrop = (date, item, type) => {
+    const dateKey = date.toISOString().split('T')[0];
+    setCalendarSchedule(prev => ({
+      ...prev,
+      [dateKey]: {
+        ...prev[dateKey],
+        [type]: item
+      }
+    }));
+  };
+
+  // Reset daily nutrition (call this at midnight or when needed)
+  const resetDailyNutrition = () => {
+    setDailyNutrition({
+      calories: 0,
+      protein: 0,
+      carbs: 0,
+      fat: 0,
+      fiber: 0
+    });
+    Cookies.remove('neutaris_daily_nutrition');
+  };
+
+  // Clear calendar schedule
+  const clearCalendarSchedule = () => {
+    setCalendarSchedule({});
+    Cookies.remove('neutaris_calendar_schedule');
+  };
 
   const handleProfileSelect = (profile) => {
     setCurrentProfile(profile);
@@ -146,8 +215,12 @@ function App() {
         setCurrentProfile(updatedProfiles[0]);
       } else {
         setCurrentProfile(null);
+        Cookies.remove('neutaris_current_profile');
         setShowProfileSelection(true);
       }
+    }
+    if (updatedProfiles.length === 0) {
+      Cookies.remove('neutaris_profiles');
     }
   };
 
@@ -159,87 +232,23 @@ function App() {
     setGalleryLink(link);
   };
 
-  // Handle meal selection from MealSidebar
-  const handleMealSelect = (mealData) => {
-    setSelectedMeal(mealData);
-    
-    // Update daily nutrition totals
-    setDailyNutrition(prev => ({
-      calories: prev.calories + (mealData.calories || 0),
-      protein: prev.protein + (mealData.protein || 0),
-      carbs: prev.carbs + (mealData.carbs || 0),
-      fat: prev.fat + (mealData.fat || 0),
-      fiber: prev.fiber + (mealData.fiber || 0)
-    }));
-  };
-
-  // Handle workout selection from WorkoutSidebar
-  const handleWorkoutSelect = (workoutData) => {
-    setSelectedWorkout(workoutData);
-    
-    // Add workout to daily workouts if not already present
-    const workoutExists = dailyWorkouts.some(workout => workout.name === workoutData.name);
-    if (!workoutExists) {
-      setDailyWorkouts(prev => [...prev, {
-        ...workoutData,
-        completed: false,
-        timestamp: new Date().toISOString()
-      }]);
-    }
-  };
-
-  // Toggle workout completion
-  const toggleWorkoutCompletion = (workoutName) => {
-    setDailyWorkouts(prev => 
-      prev.map(workout => 
-        workout.name === workoutName 
-          ? { ...workout, completed: !workout.completed }
-          : workout
-      )
-    );
-  };
-
-  // Reset daily nutrition (call this at midnight or when needed)
-  const resetDailyNutrition = () => {
-    setDailyNutrition({
-      calories: 0,
-      protein: 0,
-      carbs: 0,
-      fat: 0,
-      fiber: 0
-    });
-    Cookies.remove('neutaris_daily_nutrition');
-  };
-
-  // Reset daily workouts
-  const resetDailyWorkouts = () => {
-    setDailyWorkouts([]);
-    Cookies.remove('neutaris_daily_workouts');
-  };
-
   // Get welcome message based on profile
   const getWelcomeMessage = () => {
     if (currentProfile) {
-      const remembered = Cookies.get('neutaris_remembered_user');
-      if (remembered) {
-        return `Hello ${currentProfile.name}!`;
-      }
-      return `Hello ${currentProfile.name}`;
+      return `Hello ${currentProfile.name}!`;
     }
-    return "Hello";
+    return "Hello!";
   };
 
-  // Calculate total calories burned from completed workouts
-  const getTotalCaloriesBurned = () => {
-    return dailyWorkouts
-      .filter(workout => workout.completed)
-      .reduce((total, workout) => total + (workout.calories || 0), 0);
-  };
-
-  // Calculate net calories (consumed - burned)
-  const getNetCalories = () => {
-    return dailyNutrition.calories - getTotalCaloriesBurned();
-  };
+  // Fade-in animation for welcome message
+  useEffect(() => {
+    if (currentProfile) {
+      gsap.fromTo('.welcome-message',
+        { opacity: 0, y: -20 },
+        { opacity: 1, y: 0, duration: 1, ease: "power2.out" }
+      );
+    }
+  }, [currentProfile]);
 
   if (showProfileSelection) {
     return (
@@ -248,16 +257,13 @@ function App() {
           profiles={profiles}
           onProfileSelect={handleProfileSelect}
           onCreateProfile={handleCreateProfile}
-          onDeleteProfile={handleDeleteProfile}
         />
-      </div>
-    );
-  }
-
-  if (showCharacterCreation) {
-    return (
-      <div className="app">
-        <CharacterCreation onProfileCreated={handleProfileCreated} />
+        {showCharacterCreation && (
+          <CharacterCreation
+            onProfileCreated={handleProfileCreated}
+            onCancel={() => setShowCharacterCreation(false)}
+          />
+        )}
       </div>
     );
   }
@@ -272,114 +278,75 @@ function App() {
               className="welcome-message"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "power3.out" }}
+              transition={{ duration: 1, ease: "power2.out" }}
             >
               {getWelcomeMessage()}
             </motion.h1>
-            <motion.button
+          </div>
+          
+          <div className="header-actions">
+            <button 
               className="switch-profile-btn"
               onClick={handleSwitchProfile}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
             >
               Switch Profile
-            </motion.button>
+            </button>
           </div>
         </div>
       </header>
 
       <main className="main-content">
         <div className="container">
-          {/* Daily Summary Section */}
-          {(dailyNutrition.calories > 0 || dailyWorkouts.length > 0) && (
-            <section className="daily-summary">
-              <h3>Today's Summary</h3>
-              
-              {/* Nutrition Summary */}
-              {dailyNutrition.calories > 0 && (
-                <div className="nutrition-summary">
-                  <h4>Nutrition</h4>
-                  <div className="nutrition-stats">
-                    <div className="nutrition-stat">
-                      <span className="stat-label">Calories</span>
-                      <span className="stat-value">{dailyNutrition.calories}</span>
-                    </div>
-                    <div className="nutrition-stat">
-                      <span className="stat-label">Protein</span>
-                      <span className="stat-value">{dailyNutrition.protein}g</span>
-                    </div>
-                    <div className="nutrition-stat">
-                      <span className="stat-label">Carbs</span>
-                      <span className="stat-value">{dailyNutrition.carbs}g</span>
-                    </div>
-                    <div className="nutrition-stat">
-                      <span className="stat-label">Fat</span>
-                      <span className="stat-value">{dailyNutrition.fat}g</span>
-                    </div>
-                    <div className="nutrition-stat">
-                      <span className="stat-label">Fiber</span>
-                      <span className="stat-value">{dailyNutrition.fiber}g</span>
-                    </div>
-                  </div>
+          {/* Daily Nutrition Summary */}
+          {dailyNutrition.calories > 0 && (
+            <section className="nutrition-summary">
+              <h3>Today's Nutrition</h3>
+              <div className="nutrition-stats">
+                <div className="nutrition-stat">
+                  <span className="stat-label">Calories</span>
+                  <span className="stat-value">{dailyNutrition.calories}</span>
                 </div>
-              )}
-
-              {/* Workout Summary */}
-              {dailyWorkouts.length > 0 && (
-                <div className="workout-summary">
-                  <h4>Workouts</h4>
-                  <div className="workout-stats">
-                    <div className="workout-stat">
-                      <span className="stat-label">Completed</span>
-                      <span className="stat-value">
-                        {dailyWorkouts.filter(w => w.completed).length}/{dailyWorkouts.length}
-                      </span>
-                    </div>
-                    <div className="workout-stat">
-                      <span className="stat-label">Calories Burned</span>
-                      <span className="stat-value">{getTotalCaloriesBurned()}</span>
-                    </div>
-                    <div className="workout-stat">
-                      <span className="stat-label">Net Calories</span>
-                      <span className={`stat-value ${getNetCalories() < 0 ? 'negative' : 'positive'}`}>
-                        {getNetCalories()}
-                      </span>
-                    </div>
-                  </div>
+                <div className="nutrition-stat">
+                  <span className="stat-label">Protein</span>
+                  <span className="stat-value">{dailyNutrition.protein}g</span>
                 </div>
-              )}
-
-              {/* Reset Buttons */}
-              <div className="reset-buttons">
-                <button 
-                  className="reset-btn"
-                  onClick={resetDailyNutrition}
-                >
-                  Reset Nutrition
-                </button>
-                <button 
-                  className="reset-btn"
-                  onClick={resetDailyWorkouts}
-                >
-                  Reset Workouts
-                </button>
+                <div className="nutrition-stat">
+                  <span className="stat-label">Carbs</span>
+                  <span className="stat-value">{dailyNutrition.carbs}g</span>
+                </div>
+                <div className="nutrition-stat">
+                  <span className="stat-label">Fat</span>
+                  <span className="stat-value">{dailyNutrition.fat}g</span>
+                </div>
+                <div className="nutrition-stat">
+                  <span className="stat-label">Fiber</span>
+                  <span className="stat-value">{dailyNutrition.fiber}g</span>
+                </div>
               </div>
+              <button 
+                className="reset-nutrition-btn"
+                onClick={resetDailyNutrition}
+              >
+                Reset Daily
+              </button>
             </section>
           )}
 
           {/* Main Content Layout */}
           <div className="main-layout">
             {/* Left Sidebar - Workout Sidebar */}
-            <div className="left-sidebar">
-              {showWorkoutSidebar && (
+            {showWorkoutSidebar && (
+              <div className="left-sidebar">
                 <WorkoutSidebar 
                   onWorkoutSelect={handleWorkoutSelect}
                   selectedWorkout={selectedWorkout}
+                  onCalendarDrop={handleCalendarDrop}
+                  currentDate={currentDate}
                 />
-              )}
-            </div>
+              </div>
+            )}
 
-            {/* Center Content - Dashboard */}
+            {/* Center Content - Dashboard with Calendar */}
             <div className="center-content">
               <Dashboard
                 currentProfile={currentProfile}
@@ -387,20 +354,43 @@ function App() {
                 onGalleryLinkChange={handleGalleryLinkChange}
                 selectedMeal={selectedMeal}
                 selectedWorkout={selectedWorkout}
-                dailyWorkouts={dailyWorkouts}
-                onToggleWorkoutCompletion={toggleWorkoutCompletion}
+                onMealSelect={handleMealSelect}
+                onWorkoutSelect={handleWorkoutSelect}
+                calendarSchedule={calendarSchedule}
+                onCalendarDrop={handleCalendarDrop}
+                currentDate={currentDate}
+                onDateChange={setCurrentDate}
+                onClearSchedule={clearCalendarSchedule}
               />
             </div>
 
             {/* Right Sidebar - Meal Sidebar */}
-            <div className="right-sidebar">
-              {showMealSidebar && (
+            {showMealSidebar && (
+              <div className="right-sidebar">
                 <MealSidebar 
                   onMealSelect={handleMealSelect}
                   selectedMeal={selectedMeal}
+                  onCalendarDrop={handleCalendarDrop}
+                  currentDate={currentDate}
                 />
-              )}
-            </div>
+              </div>
+            )}
+          </div>
+
+          {/* Sidebar Toggle Controls */}
+          <div className="sidebar-controls">
+            <button 
+              className={`sidebar-toggle ${showWorkoutSidebar ? 'active' : ''}`}
+              onClick={() => setShowWorkoutSidebar(!showWorkoutSidebar)}
+            >
+              {showWorkoutSidebar ? 'Hide' : 'Show'} Workouts
+            </button>
+            <button 
+              className={`sidebar-toggle ${showMealSidebar ? 'active' : ''}`}
+              onClick={() => setShowMealSidebar(!showMealSidebar)}
+            >
+              {showMealSidebar ? 'Hide' : 'Show'} Meals
+            </button>
           </div>
 
           {/* Selected Items Details */}
@@ -456,23 +446,19 @@ function App() {
                   <div className="workout-details-grid">
                     <div className="workout-info">
                       <h4>Workout Info</h4>
-                      <div className="workout-meta">
-                        <span>Time: {selectedWorkout.estimatedTime}</span>
+                      <div className="info-grid">
                         <span>Difficulty: {selectedWorkout.difficulty}</span>
-                        <span>Calories: {selectedWorkout.calories}</span>
-                        <span>Category: {selectedWorkout.category}</span>
+                        <span>Time: {selectedWorkout.estimatedTime}</span>
+                        <span>Muscle Groups: {selectedWorkout.muscleGroups.join(', ')}</span>
                       </div>
                     </div>
                     {selectedWorkout.benefits && (
                       <div className="workout-benefits">
                         <h4>Benefits</h4>
                         <ul>
-                          {Array.isArray(selectedWorkout.benefits)
-                            ? selectedWorkout.benefits.map((benefit, index) => (
-                                <li key={index}>{benefit}</li>
-                              ))
-                            : <li>{selectedWorkout.benefits}</li>
-                          }
+                          {selectedWorkout.benefits.map((benefit, index) => (
+                            <li key={index}>{benefit}</li>
+                          ))}
                         </ul>
                       </div>
                     )}
@@ -480,54 +466,15 @@ function App() {
                       <div className="workout-instructions">
                         <h4>Instructions</h4>
                         <ol>
-                          {Array.isArray(selectedWorkout.instructions)
-                            ? selectedWorkout.instructions.map((instruction, index) => (
-                                <li key={index}>{instruction}</li>
-                              ))
-                            : <li>{selectedWorkout.instructions}</li>
-                          }
+                          {selectedWorkout.instructions.map((instruction, index) => (
+                            <li key={index}>{instruction}</li>
+                          ))}
                         </ol>
-                      </div>
-                    )}
-                    {selectedWorkout.tips && (
-                      <div className="workout-tips">
-                        <h4>Tips</h4>
-                        <p>{selectedWorkout.tips}</p>
                       </div>
                     )}
                   </div>
                 </div>
               )}
-            </section>
-          )}
-
-          {/* Daily Workouts List */}
-          {dailyWorkouts.length > 0 && (
-            <section className="daily-workouts-list">
-              <h3>Today's Workouts</h3>
-              <div className="workouts-grid">
-                {dailyWorkouts.map((workout, index) => (
-                  <div 
-                    key={index} 
-                    className={`workout-item ${workout.completed ? 'completed' : ''}`}
-                  >
-                    <div className="workout-header">
-                      <h4>{workout.name}</h4>
-                      <span className="workout-time">{workout.estimatedTime}</span>
-                    </div>
-                    <div className="workout-meta">
-                      <span className="difficulty">{workout.difficulty}</span>
-                      <span className="calories">{workout.calories} cal</span>
-                    </div>
-                    <button
-                      className={`completion-btn ${workout.completed ? 'completed' : ''}`}
-                      onClick={() => toggleWorkoutCompletion(workout.name)}
-                    >
-                      {workout.completed ? '✓ Completed' : 'Mark Complete'}
-                    </button>
-                  </div>
-                ))}
-              </div>
             </section>
           )}
         </div>
