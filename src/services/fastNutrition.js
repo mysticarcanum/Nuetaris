@@ -280,6 +280,305 @@ class FastNutritionService {
       };
     }
     
+    if (name.includes('rice') || name.includes('grain')) {
+      return {
+        calories: 220,
+        protein: 5,
+        carbs: 45,
+        fat: 2,
+        sugar: 1,
+        fiber: 3,
+        sodium: 200,
+        saturatedFat: 0,
+        cholesterol: 0,
+        potassium: 150,
+        vitaminC: 0,
+        calcium: 20,
+        iron: 1,
+        ingredients: ['Rice or grain', 'Seasonings', 'Vegetables'],
+        instructions: ['Cook grain', 'Add seasonings', 'Serve with vegetables'],
+        tips: 'Use brown rice for more fiber',
+        cookTime: '20 minutes',
+        nutrition: 'Complex carbohydrates, fiber'
+      };
+    }
+    
+    if (name.includes('sandwich') || name.includes('wrap')) {
+      return {
+        calories: 350,
+        protein: 20,
+        carbs: 40,
+        fat: 15,
+        sugar: 5,
+        fiber: 4,
+        sodium: 700,
+        saturatedFat: 5,
+        cholesterol: 50,
+        potassium: 300,
+        vitaminC: 10,
+        calcium: 100,
+        iron: 2,
+        ingredients: ['Bread or wrap', 'Protein', 'Vegetables', 'Condiments'],
+        instructions: ['Layer ingredients', 'Wrap or close sandwich', 'Serve'],
+        tips: 'Use whole grain bread for better nutrition',
+        cookTime: '5 minutes',
+        nutrition: 'Balanced meal with protein and carbs'
+      };
+    }
+    
+    if (name.includes('eggs') || name.includes('omelet')) {
+      return {
+        calories: 280,
+        protein: 18,
+        carbs: 5,
+        fat: 20,
+        sugar: 2,
+        fiber: 1,
+        sodium: 400,
+        saturatedFat: 6,
+        cholesterol: 400,
+        potassium: 200,
+        vitaminC: 5,
+        calcium: 100,
+        iron: 2,
+        ingredients: ['Eggs', 'Vegetables', 'Cheese', 'Seasonings'],
+        instructions: ['Beat eggs', 'Add ingredients', 'Cook until set'],
+        tips: 'Don\'t overcook eggs for best texture',
+        cookTime: '10 minutes',
+        nutrition: 'High protein breakfast option'
+      };
+    }
+    
+    if (name.includes('pancake') || name.includes('waffle')) {
+      return {
+        calories: 300,
+        protein: 8,
+        carbs: 50,
+        fat: 10,
+        sugar: 15,
+        fiber: 2,
+        sodium: 400,
+        saturatedFat: 3,
+        cholesterol: 60,
+        potassium: 150,
+        vitaminC: 0,
+        calcium: 100,
+        iron: 2,
+        ingredients: ['Flour', 'Eggs', 'Milk', 'Butter', 'Syrup'],
+        instructions: ['Mix batter', 'Cook on griddle', 'Serve with toppings'],
+        tips: 'Use whole grain flour for better nutrition',
+        cookTime: '15 minutes',
+        nutrition: 'Classic breakfast with carbs'
+      };
+    }
+    
+    if (name.includes('cereal') || name.includes('oatmeal')) {
+      return {
+        calories: 200,
+        protein: 8,
+        carbs: 35,
+        fat: 5,
+        sugar: 10,
+        fiber: 5,
+        sodium: 150,
+        saturatedFat: 1,
+        cholesterol: 0,
+        potassium: 200,
+        vitaminC: 5,
+        calcium: 100,
+        iron: 3,
+        ingredients: ['Cereal or oats', 'Milk', 'Fruits', 'Nuts'],
+        instructions: ['Pour cereal', 'Add milk', 'Top with fruits'],
+        tips: 'Choose low-sugar cereals for better nutrition',
+        cookTime: '3 minutes',
+        nutrition: 'Fiber-rich breakfast option'
+      };
+    }
+    
+    if (name.includes('noodle') || name.includes('ramen')) {
+      return {
+        calories: 400,
+        protein: 12,
+        carbs: 65,
+        fat: 10,
+        sugar: 5,
+        fiber: 3,
+        sodium: 800,
+        saturatedFat: 3,
+        cholesterol: 0,
+        potassium: 200,
+        vitaminC: 5,
+        calcium: 50,
+        iron: 2,
+        ingredients: ['Noodles', 'Broth', 'Vegetables', 'Protein'],
+        instructions: ['Cook noodles', 'Prepare broth', 'Add toppings'],
+        tips: 'Use fresh vegetables for better nutrition',
+        cookTime: '15 minutes',
+        nutrition: 'Comforting noodle dish'
+      };
+    }
+    
+    if (name.includes('curry') || name.includes('spice')) {
+      return {
+        calories: 350,
+        protein: 15,
+        carbs: 40,
+        fat: 15,
+        sugar: 8,
+        fiber: 6,
+        sodium: 600,
+        saturatedFat: 3,
+        cholesterol: 30,
+        potassium: 400,
+        vitaminC: 20,
+        calcium: 100,
+        iron: 3,
+        ingredients: ['Protein', 'Vegetables', 'Spices', 'Coconut milk'],
+        instructions: ['Sauté spices', 'Add protein and vegetables', 'Simmer'],
+        tips: 'Adjust spice level to preference',
+        cookTime: '25 minutes',
+        nutrition: 'Flavorful spiced dish'
+      };
+    }
+    
+    if (name.includes('stew') || name.includes('casserole')) {
+      return {
+        calories: 380,
+        protein: 20,
+        carbs: 35,
+        fat: 18,
+        sugar: 8,
+        fiber: 5,
+        sodium: 600,
+        saturatedFat: 6,
+        cholesterol: 60,
+        potassium: 500,
+        vitaminC: 15,
+        calcium: 100,
+        iron: 3,
+        ingredients: ['Protein', 'Vegetables', 'Broth', 'Seasonings'],
+        instructions: ['Brown meat', 'Add vegetables', 'Simmer until tender'],
+        tips: 'Cook low and slow for best flavor',
+        cookTime: '45 minutes',
+        nutrition: 'Hearty comfort food'
+      };
+    }
+    
+    if (name.includes('grill') || name.includes('barbecue')) {
+      return {
+        calories: 400,
+        protein: 30,
+        carbs: 25,
+        fat: 20,
+        sugar: 5,
+        fiber: 3,
+        sodium: 500,
+        saturatedFat: 6,
+        cholesterol: 80,
+        potassium: 400,
+        vitaminC: 10,
+        calcium: 50,
+        iron: 3,
+        ingredients: ['Protein', 'Seasonings', 'Vegetables', 'Sauce'],
+        instructions: ['Season meat', 'Grill to desired doneness', 'Serve'],
+        tips: 'Let meat rest before cutting',
+        cookTime: '20 minutes',
+        nutrition: 'Grilled protein with sides'
+      };
+    }
+    
+    if (name.includes('bake') || name.includes('roast')) {
+      return {
+        calories: 350,
+        protein: 25,
+        carbs: 30,
+        fat: 15,
+        sugar: 5,
+        fiber: 4,
+        sodium: 400,
+        saturatedFat: 4,
+        cholesterol: 60,
+        potassium: 400,
+        vitaminC: 15,
+        calcium: 80,
+        iron: 2,
+        ingredients: ['Protein', 'Vegetables', 'Seasonings', 'Oil'],
+        instructions: ['Season ingredients', 'Arrange on pan', 'Bake until done'],
+        tips: 'Use high heat for crispy texture',
+        cookTime: '30 minutes',
+        nutrition: 'Oven-roasted meal'
+      };
+    }
+    
+    if (name.includes('stir') || name.includes('wok')) {
+      return {
+        calories: 320,
+        protein: 18,
+        carbs: 35,
+        fat: 12,
+        sugar: 8,
+        fiber: 5,
+        sodium: 600,
+        saturatedFat: 2,
+        cholesterol: 40,
+        potassium: 400,
+        vitaminC: 25,
+        calcium: 80,
+        iron: 2,
+        ingredients: ['Protein', 'Vegetables', 'Sauce', 'Oil'],
+        instructions: ['Heat wok', 'Stir fry protein', 'Add vegetables'],
+        tips: 'Use high heat for authentic stir fry',
+        cookTime: '15 minutes',
+        nutrition: 'Quick stir-fried dish'
+      };
+    }
+    
+    if (name.includes('dip') || name.includes('spread')) {
+      return {
+        calories: 120,
+        protein: 5,
+        carbs: 8,
+        fat: 8,
+        sugar: 3,
+        fiber: 2,
+        sodium: 300,
+        saturatedFat: 2,
+        cholesterol: 10,
+        potassium: 150,
+        vitaminC: 5,
+        calcium: 50,
+        iron: 1,
+        ingredients: ['Base ingredient', 'Seasonings', 'Herbs', 'Oil'],
+        instructions: ['Mix ingredients', 'Season to taste', 'Chill if needed'],
+        tips: 'Let flavors meld for best taste',
+        cookTime: '5 minutes',
+        nutrition: 'Flavorful dip or spread'
+      };
+    }
+    
+    if (name.includes('snack') || name.includes('trail')) {
+      return {
+        calories: 160,
+        protein: 5,
+        carbs: 15,
+        fat: 10,
+        sugar: 8,
+        fiber: 3,
+        sodium: 50,
+        saturatedFat: 1,
+        cholesterol: 0,
+        potassium: 200,
+        vitaminC: 0,
+        calcium: 50,
+        iron: 1,
+        ingredients: ['Nuts', 'Dried fruits', 'Seeds', 'Optional chocolate'],
+        instructions: ['Mix ingredients', 'Portion into servings', 'Store'],
+        tips: 'Use unsalted nuts for lower sodium',
+        cookTime: '5 minutes',
+        nutrition: 'Energy-rich snack mix'
+      };
+    }
+    
     // Default estimation for unknown meals
     return {
       calories: 300,
@@ -349,6 +648,158 @@ class FastNutritionService {
           .filter(meal => meal.category === category)
           .map(meal => meal.name)
       : [];
+  }
+  
+  // Get meals by cuisine
+  static getMealsByCuisine(cuisine) {
+    return nutritionDatabase
+      ? nutritionDatabase
+          .filter(meal => meal.cuisine === cuisine)
+          .map(meal => meal.name)
+      : [];
+  }
+  
+  // Get random meal suggestions
+  static getRandomMeals(count = 5) {
+    if (!nutritionDatabase || nutritionDatabase.length === 0) {
+      return [];
+    }
+    
+    const shuffled = [...nutritionDatabase].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count).map(meal => meal.name);
+  }
+  
+  // Get meal by exact name
+  static getMealByName(mealName) {
+    if (!nutritionDatabase || nutritionDatabase.length === 0) {
+      return null;
+    }
+    
+    return nutritionDatabase.find(meal => 
+      meal.name.toLowerCase() === mealName.toLowerCase()
+    );
+  }
+  
+  // Get nutritional summary for a meal
+  static getNutritionalSummary(mealName) {
+    const meal = this.getMealByName(mealName);
+    if (!meal) return null;
+    
+    return {
+      calories: meal.calories,
+      protein: meal.protein,
+      carbs: meal.carbs,
+      fat: meal.fat,
+      fiber: meal.fiber,
+      summary: `${meal.calories} calories, ${meal.protein}g protein, ${meal.carbs}g carbs, ${meal.fat}g fat`
+    };
+  }
+  
+  // Get cooking tips for a meal
+  static getCookingTips(mealName) {
+    const meal = this.getMealByName(mealName);
+    return meal ? meal.tips : null;
+  }
+  
+  // Get cooking time for a meal
+  static getCookingTime(mealName) {
+    const meal = this.getMealByName(mealName);
+    return meal ? meal.cookTime : null;
+  }
+  
+  // Get ingredients for a meal
+  static getIngredients(mealName) {
+    const meal = this.getMealByName(mealName);
+    return meal ? meal.ingredients : null;
+  }
+  
+  // Get instructions for a meal
+  static getInstructions(mealName) {
+    const meal = this.getMealByName(mealName);
+    return meal ? meal.instructions : null;
+  }
+  
+  // Get meal categories
+  static getMealCategories() {
+    if (!nutritionDatabase || nutritionDatabase.length === 0) {
+      return [];
+    }
+    
+    const categories = [...new Set(nutritionDatabase.map(meal => meal.category))];
+    return categories.sort();
+  }
+  
+  // Get cuisine types
+  static getCuisineTypes() {
+    if (!nutritionDatabase || nutritionDatabase.length === 0) {
+      return [];
+    }
+    
+    const cuisines = [...new Set(nutritionDatabase.map(meal => meal.cuisine))];
+    return cuisines.sort();
+  }
+  
+  // Search meals by multiple criteria
+  static searchMealsByCriteria(criteria) {
+    if (!nutritionDatabase || nutritionDatabase.length === 0) {
+      return [];
+    }
+    
+    let filtered = nutritionDatabase;
+    
+    if (criteria.category) {
+      filtered = filtered.filter(meal => meal.category === criteria.category);
+    }
+    
+    if (criteria.cuisine) {
+      filtered = filtered.filter(meal => meal.cuisine === criteria.cuisine);
+    }
+    
+    if (criteria.maxCalories) {
+      filtered = filtered.filter(meal => meal.calories <= criteria.maxCalories);
+    }
+    
+    if (criteria.minProtein) {
+      filtered = filtered.filter(meal => meal.protein >= criteria.minProtein);
+    }
+    
+    if (criteria.searchTerm) {
+      const searchTerm = criteria.searchTerm.toLowerCase();
+      filtered = filtered.filter(meal => 
+        meal.name.toLowerCase().includes(searchTerm) ||
+        meal.keywords?.some(keyword => keyword.toLowerCase().includes(searchTerm))
+      );
+    }
+    
+    return filtered.map(meal => meal.name);
+  }
+  
+  // Get meal statistics
+  static getMealStatistics() {
+    if (!nutritionDatabase || nutritionDatabase.length === 0) {
+      return null;
+    }
+    
+    const totalMeals = nutritionDatabase.length;
+    const categories = [...new Set(nutritionDatabase.map(meal => meal.category))];
+    const cuisines = [...new Set(nutritionDatabase.map(meal => meal.cuisine))];
+    
+    const avgCalories = nutritionDatabase.reduce((sum, meal) => sum + meal.calories, 0) / totalMeals;
+    const avgProtein = nutritionDatabase.reduce((sum, meal) => sum + meal.protein, 0) / totalMeals;
+    const avgCarbs = nutritionDatabase.reduce((sum, meal) => sum + meal.carbs, 0) / totalMeals;
+    const avgFat = nutritionDatabase.reduce((sum, meal) => sum + meal.fat, 0) / totalMeals;
+    
+    return {
+      totalMeals,
+      categories: categories.length,
+      cuisines: cuisines.length,
+      averageNutrition: {
+        calories: Math.round(avgCalories),
+        protein: Math.round(avgProtein),
+        carbs: Math.round(avgCarbs),
+        fat: Math.round(avgFat)
+      }
+    };
   }
 }
 
