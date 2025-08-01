@@ -6,6 +6,8 @@ import Dashboard from './components/Dashboard';
 import CircularGallery from './components/CircularGallery';
 import MealSidebar from './components/MealSidebar';
 import WorkoutSidebar from './components/WorkoutSidebar';
+import CharacterDisplay from './components/CharacterDisplay';
+import CharacterEditor from './components/CharacterEditor';
 import { gsap } from 'gsap';
 
 function App() {
@@ -27,6 +29,8 @@ function App() {
   });
   const [calendarSchedule, setCalendarSchedule] = useState({});
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [showCharacterEditor, setShowCharacterEditor] = useState(false);
+  const [currentCharacter, setCurrentCharacter] = useState(null);
 
   // Load all data from cookies on mount
   useEffect(() => {
@@ -37,6 +41,7 @@ function App() {
     const savedShowWorkoutSidebar = Cookies.get('neutaris_show_workout_sidebar');
     const savedDailyNutrition = Cookies.get('neutaris_daily_nutrition');
     const savedCalendarSchedule = Cookies.get('neutaris_calendar_schedule');
+    const savedCharacter = Cookies.get('neutaris_character');
 
     if (savedProfiles) {
       try {
@@ -81,6 +86,14 @@ function App() {
         setCalendarSchedule(JSON.parse(savedCalendarSchedule));
       } catch (error) {
         console.error('Error parsing calendar schedule:', error);
+      }
+    }
+
+    if (savedCharacter) {
+      try {
+        setCurrentCharacter(JSON.parse(savedCharacter));
+      } catch (error) {
+        console.error('Error loading saved character:', error);
       }
     }
   }, []);
@@ -176,6 +189,12 @@ function App() {
   const clearCalendarSchedule = () => {
     setCalendarSchedule({});
     Cookies.remove('neutaris_calendar_schedule');
+  };
+
+  // Handle character save
+  const handleCharacterSave = (updatedCharacter) => {
+    setCurrentCharacter(updatedCharacter);
+    Cookies.set('neutaris_character', JSON.stringify(updatedCharacter), { expires: 365 });
   };
 
   const handleProfileSelect = (profile) => {
@@ -290,6 +309,12 @@ function App() {
               onClick={handleSwitchProfile}
             >
               Switch Profile
+            </button>
+            <button 
+              className="character-edit-btn"
+              onClick={() => setShowCharacterEditor(true)}
+            >
+              ⚙️
             </button>
           </div>
         </div>
@@ -479,66 +504,25 @@ function App() {
           )}
         </div>
       </main>
+
+      {/* Character Display */}
+      {currentCharacter && (
+        <CharacterDisplay 
+          character={currentCharacter}
+          onCharacterClick={() => console.log('Character clicked')}
+        />
+      )}
+
+      {/* Character Editor Modal */}
+      {showCharacterEditor && (
+        <CharacterEditor
+          character={currentCharacter}
+          onSave={handleCharacterSave}
+          onClose={() => setShowCharacterEditor(false)}
+        />
+      )}
     </div>
   );
 }
-
-// Add to imports
-import CharacterDisplay from './components/CharacterDisplay';
-import CharacterEditor from './components/CharacterEditor';
-
-// Add to state
-const [showCharacterEditor, setShowCharacterEditor] = useState(false);
-const [currentCharacter, setCurrentCharacter] = useState(null);
-
-// Add after existing useEffect hooks
-useEffect(() => {
-  const savedCharacter = Cookies.get('neutaris_character');
-  if (savedCharacter) {
-    try {
-      setCurrentCharacter(JSON.parse(savedCharacter));
-    } catch (error) {
-      console.error('Error loading saved character:', error);
-    }
-  }
-}, []);
-
-// Add character save handler
-const handleCharacterSave = (updatedCharacter) => {
-  setCurrentCharacter(updatedCharacter);
-  Cookies.set('neutaris_character', JSON.stringify(updatedCharacter), { expires: 365 });
-};
-
-// Add to the return statement, just before closing </div>
-{currentCharacter && (
-  <CharacterDisplay 
-    character={currentCharacter}
-    onCharacterClick={() => console.log('Character clicked')}
-  />
-)}
-
-{showCharacterEditor && (
-  <CharacterEditor
-    character={currentCharacter}
-    onSave={handleCharacterSave}
-    onClose={() => setShowCharacterEditor(false)}
-  />
-)}
-
-{/* Add gear icon to header */}
-<div className="header-actions">
-  <button 
-    className="switch-profile-btn"
-    onClick={handleSwitchProfile}
-  >
-    Switch Profile
-  </button>
-  <button 
-    className="character-edit-btn"
-    onClick={() => setShowCharacterEditor(true)}
-  >
-    ⚙️
-  </button>
-</div>
 
 export default App;
